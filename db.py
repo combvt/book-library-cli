@@ -54,7 +54,36 @@ def add_book(
         )
         conn.commit()
 
+def show_library():
+    with get_connection() as conn:
+        cursor = conn.execute(
+        """
+        SELECT id, title, author, description, categories, page_count,
+        date_published, google_id, isbn, created_at FROM books
+        """
+    )    
+        rows = cursor.fetchall()
 
+    books = []
+
+    for row in rows:
+        book = {
+            "id": row[0],
+            "title": row[1],
+            "author": row[2],
+            "description": row[3],
+            "categories": row[4],
+            "page_count": row[5],
+            "date_published": row[6],
+            "google_id": row[7],
+            "isbn": row[8],
+            "created_at": row[9],
+        }
+        books.append(book)
+    return books
+
+print(show_library())
+        
 
 
 
