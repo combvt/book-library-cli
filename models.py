@@ -7,6 +7,7 @@ class Book:
         description: str,
         categories: str,
         date_published: str,
+        isbn: str,
     ):
         self.title = title
         self.book_id = book_id
@@ -15,11 +16,13 @@ class Book:
         self.description = description
         self.categories = categories
         self.date_published = date_published
-
+        self.isbn = isbn
 
     @classmethod
     def from_api(cls, item: dict) -> Book:
         volume_info = item.get("volumeInfo", {})
+        identifier = volume_info.get("industryIdentifiers", {})[0]
+
 
         book_title = volume_info.get("title", "Unknown")
         book_id = item.get("id", "")
@@ -28,6 +31,7 @@ class Book:
         book_page_count = volume_info.get("pageCount", "Unknown")
         book_description = volume_info.get("description", "No book description")
         book_category = ", ".join(volume_info.get("categories", ["Unknown category"]))
+        book_isbn = identifier.get("identifier", "Unknown ISBN")
 
         return cls(
             title = book_title,
@@ -37,6 +41,7 @@ class Book:
             description = book_description,
             categories = book_category,
             book_id = book_id,
+            isbn = book_isbn,
         )
 
 
@@ -49,6 +54,7 @@ class Book:
         book_page_count = data.get("Page Count", "Unknown")
         book_description = data.get("Description", "No book description")
         book_category = data.get("Categories", ["Unknown category"])
+        book_isbn = data.get("isbn", "Unknown ISBN")
 
         return cls(
             title = book_title,
@@ -58,6 +64,7 @@ class Book:
             description = book_description,
             categories = book_category,
             book_id = book_id,
+            isbn = book_isbn
         )
 
 
@@ -70,6 +77,7 @@ class Book:
             "Page Count": self.page_count,
             "Description": self.description,
             "Categories": self.categories,
+            "isbn": self.isbn
         }
     
 
@@ -84,5 +92,6 @@ class Book:
         f"Description: {self.description}\n"
         f"Page count: {self.page_count}\n"
         f"Categories: {self.categories}\n"
+        f"isbn: {self.isbn}\n"
     )
  
