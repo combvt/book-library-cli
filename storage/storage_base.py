@@ -7,8 +7,8 @@ class LibraryStorage:
 
 
     def add(self, book: Book) -> None:
-        pass
+        raise NotImplementedError
 
 
     def remove (self, index: int) -> None:
-        pass
+        raise NotImplementedError

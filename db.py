@@ -1,10 +1,8 @@
 import sqlite3
-from datetime import datetime
+
 
 
 DB_PATH = "books.db"
-class SqlLibraryStorage(LibraryStorage):
-    def __init__
 
 
 def get_connection():
@@ -16,7 +14,7 @@ def init_db():
         conn.execute(
         """
         CREATE TABLE IF NOT EXISTS books (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY,
         title TEXT NOT NULL,
         author TEXT,
         description TEXT,
@@ -25,7 +23,7 @@ def init_db():
         date_published TEXT,
         google_id TEXT,
         isbn TEXT,
-        created_at TEXT
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP
         );
         """
         )
@@ -42,18 +40,16 @@ def add_book(
     google_id: str,
     isbn: str,
 ):
-    now = datetime.now()
-    date_time = now.strftime(r"%m/%d/%Y %H:%M:%S")
     with get_connection() as conn:
         conn.execute(
             """
             INSERT INTO books 
             (title, author, description, categories, page_count,
             date_published, google_id, isbn, created_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (title, author, description, categories, page_count, date_published,
-            google_id, isbn, date_time)
+            google_id, isbn)
         )
         conn.commit()
 
