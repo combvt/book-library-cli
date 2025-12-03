@@ -3,8 +3,9 @@ from datetime import datetime
 
 
 DB_PATH = "books.db"
-now = datetime.now()
-date_time = now.strftime(r"%m/%d/%Y %H:%M:%S")
+class SqlLibraryStorage(LibraryStorage):
+    def __init__
+
 
 def get_connection():
     return sqlite3.connect(DB_PATH)
@@ -41,6 +42,8 @@ def add_book(
     google_id: str,
     isbn: str,
 ):
+    now = datetime.now()
+    date_time = now.strftime(r"%m/%d/%Y %H:%M:%S")
     with get_connection() as conn:
         conn.execute(
             """
@@ -54,7 +57,7 @@ def add_book(
         )
         conn.commit()
 
-def show_library():
+def get_all_books_from_db():
     with get_connection() as conn:
         cursor = conn.execute(
         """
@@ -83,7 +86,7 @@ def show_library():
 
     return books
 
-print(show_library())
+
         
 
 
