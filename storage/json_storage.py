@@ -20,10 +20,10 @@ class JsonLibraryStorage(LibraryStorage):
         
 
     def add(self, book: Book) -> None:
-        list = self.load_all()
+        book_list = self.load_all()
 
-        list.append(book)
-        self._save(list)
+        book_list.append(book)
+        self._save(book_list)
 
 
     def remove(self, index: int) -> None:
