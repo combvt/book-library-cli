@@ -3,7 +3,7 @@ from models import Book
 
 class LibraryStorage:
     def load_all(self) -> list[Book]:
-        pass
+        raise NotImplementedError
 
 
     def add(self, book: Book) -> None:

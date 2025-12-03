@@ -1,4 +1,4 @@
-from storage_base import LibraryStorage
+from .storage_base import LibraryStorage
 import json
 from models import Book
 
@@ -25,8 +25,6 @@ class JsonLibraryStorage(LibraryStorage):
         list.append(book)
         self._save(list)
 
-        print(f"Added {book.title}, by {book.author} to your library.\n")
-
 
     def remove(self, index: int) -> None:
         books_list = self.load_all()
@@ -35,11 +33,10 @@ class JsonLibraryStorage(LibraryStorage):
             print("Index out of range.")
             return
         
-        removed_book = books_list.pop(index)
+        books_list.pop(index)
 
         self._save(books_list)
-        
-        print(f"Removed {removed_book.title}, by {removed_book.author}.")
+    
 
 
      

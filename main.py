@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from models import Book
 from library import Library
 from api_client import GoogleBooksClient
+from storage.json_storage import JsonLibraryStorage
 
 load_dotenv()
 
@@ -144,7 +145,8 @@ def manage_library(library: Library):
  
 
 def main():
-    library = Library(LIBRARY_PATH)
+    json_storage = JsonLibraryStorage(LIBRARY_PATH)
+    library = Library(json_storage)
     client = GoogleBooksClient(API_KEY)
     while True:
         user_answer = search_and_add_book(client, library)
