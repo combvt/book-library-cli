@@ -165,6 +165,7 @@ def manage_library(library: Library):
 def main():
     library = choose_storage()
     client = GoogleBooksClient(API_KEY)
+    
     while True:
         user_answer = search_and_add_book(client, library)
 
