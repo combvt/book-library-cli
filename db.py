@@ -80,6 +80,7 @@ def show_library():
             "created_at": row[9],
         }
         books.append(book)
+
     return books
 
 print(show_library())

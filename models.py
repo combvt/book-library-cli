@@ -21,9 +21,9 @@ class Book:
     @classmethod
     def from_api(cls, item: dict) -> Book:
         volume_info = item.get("volumeInfo", {})
-        identifier = volume_info.get("industryIdentifiers", {})[0]
-
-
+        sample = volume_info.get("industryIdentifiers", {})
+        identifier = next((value for value in sample if value.get("type") == "ISBN_13"), {})
+ 
         book_title = volume_info.get("title", "Unknown")
         book_id = item.get("id", "")
         book_author = ", ".join(volume_info.get("authors", ["Unknown author"]))
