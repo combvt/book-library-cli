@@ -27,31 +27,9 @@ def init_db():
         );
         """
         )
-    conn.commit()
-
-
-def add_book(
-    title: str,
-    author: str,
-    description: str,
-    categories: str,
-    page_count: int,
-    date_published: str,
-    google_id: str,
-    isbn: str,
-):
-    with get_connection() as conn:
-        conn.execute(
-            """
-            INSERT INTO books 
-            (title, author, description, categories, page_count,
-            date_published, google_id, isbn, created_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            """,
-            (title, author, description, categories, page_count, date_published,
-            google_id, isbn)
-        )
         conn.commit()
+
+
 
 def get_all_books_from_db():
     with get_connection() as conn:

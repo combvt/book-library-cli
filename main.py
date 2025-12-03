@@ -4,7 +4,8 @@ from models import Book
 from library import Library
 from api_client import GoogleBooksClient
 from storage.json_storage import JsonLibraryStorage
-
+from storage.sql_storage import SqlLibraryStorage
+#TODO handle IndexError, ValueError when removing item from sql database 
 load_dotenv()
 
 API_KEY = os.getenv("API_KEY")
@@ -144,9 +145,22 @@ def manage_library(library: Library):
             return "quit"
  
 
+def choose_storage() -> Library:
+    while True:
+        chosen_storage = input("Choose storage type: 'json' or 'sql': ").strip().lower()
+
+        if chosen_storage == "json":
+            library = JsonLibraryStorage(LIBRARY_PATH)
+            return Library(library)
+        elif chosen_storage == "sql":
+            library = SqlLibraryStorage("books.db")
+            return Library(library)
+        else:
+            print("Invalid option. Please type either 'json' or 'sql'.")
+
+
 def main():
-    json_storage = JsonLibraryStorage(LIBRARY_PATH)
-    library = Library(json_storage)
+    library = choose_storage()
     client = GoogleBooksClient(API_KEY)
     while True:
         user_answer = search_and_add_book(client, library)
