@@ -5,8 +5,7 @@ from library import Library
 from api_client import GoogleBooksClient
 from storage.json_storage import JsonLibraryStorage
 from storage.sql_storage import SqlLibraryStorage
-#TODO handle IndexError, ValueError when removing item from sql database 
-#TODO add view detailed info in library
+
 load_dotenv()
 
 API_KEY = os.getenv("API_KEY")
