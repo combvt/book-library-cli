@@ -3,6 +3,8 @@ from dotenv import load_dotenv
 from models import Book
 from library import Library
 from api_client import GoogleBooksClient
+from storage.json_storage import JsonLibraryStorage
+from storage.sql_storage import SqlLibraryStorage
 
 load_dotenv()
 
@@ -11,6 +13,20 @@ LIBRARY_PATH = os.getenv("LIBRARY_PATH", "book_library.json")
 
 if not API_KEY:
     raise ValueError("Missing API KEY. Make sure to create your .env file.")
+
+def choose_storage() -> Library:
+    while True:
+        chosen_storage = input("Choose storage type: 'json' or 'sql': ").strip().lower()
+
+        if chosen_storage == "json":
+            library = JsonLibraryStorage(LIBRARY_PATH)
+            return Library(library)
+        elif chosen_storage == "sql":
+            library = SqlLibraryStorage("books.db")
+            return Library(library)
+        else:
+            print("Invalid option. Please type either 'json' or 'sql'.")
+
 
 def show_searched_books(books: list[Book]) -> None:
     if not books:
@@ -143,9 +159,13 @@ def manage_library(library: Library):
             return "quit"
  
 
+
+
+
 def main():
-    library = Library(LIBRARY_PATH)
+    library = choose_storage()
     client = GoogleBooksClient(API_KEY)
+    
     while True:
         user_answer = search_and_add_book(client, library)
 

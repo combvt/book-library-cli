@@ -2,7 +2,7 @@ from models import Book
 import requests
 
 BOOK_URL = "https://www.googleapis.com/books/v1/volumes"
-MAX_RESULTS = 40
+MAX_RESULTS = 10
 
 class GoogleBooksClient:
     def __init__(self, api_key: str | None) -> None:
