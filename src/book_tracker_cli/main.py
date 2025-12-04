@@ -12,6 +12,9 @@ from book_tracker_cli.storage.sql_storage import SqlLibraryStorage
 # in SqlStorage
 #TODO Add DB_PATH to .env
 #TODO update changelog
+#TODO move helper functions outside of maine (utils.py)
+#TODO check for indexErrors, ValueErrors, typeErrors
+#TODO add get_string_from_user function
 load_dotenv()
 
 API_KEY = os.getenv("API_KEY")
@@ -57,6 +60,16 @@ def choose_book_from_list(book_list: list[Book], choice: str) -> Book | None:
     return book_list[idx]
 
 
+def get_int_from_user(prompt: str) -> int | None:
+    user_input = input(prompt).strip()
+
+    if not user_input.isdigit():
+        print("Invalid input. Please enter a number.")
+        print()
+        return
+    
+    return int(user_input)
+
 def show_library(library: Library):
     if library.is_empty():
         print("Your library is empty.")
@@ -83,6 +96,8 @@ def show_detailed_info_library(library: Library, book: Book ) -> None:
 
     for key, value in fetched_book.items():
         print(f"{key}: {value}")
+
+    print()
 
 
 def search_and_add_book(client : GoogleBooksClient, library: Library):
