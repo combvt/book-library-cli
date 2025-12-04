@@ -15,7 +15,11 @@ class Library:
 
 
     def remove(self, index: int) -> None:
-        removed_book = self.books[index]
+        try:
+            removed_book = self.books[index]
+        except IndexError:
+            print("Index out of range.")
+            return
 
         self.storage.remove(index)
         self.books = self.storage.load_all()
