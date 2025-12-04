@@ -1,4 +1,4 @@
-from models import Book
+from book_tracker_cli.models import Book
 
 
 class LibraryStorage:

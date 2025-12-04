@@ -1,6 +1,6 @@
 from .storage_base import LibraryStorage
 import json
-from models import Book
+from book_tracker_cli.models import Book
 
 class JsonLibraryStorage(LibraryStorage):
     def __init__(self, path: str):
