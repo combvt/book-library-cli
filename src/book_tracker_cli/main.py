@@ -73,9 +73,15 @@ def show_detailed_info(book: Book | None) -> None:
     print(book.detailed_text())
 
 
-def show_detailed_info_sql_library(book: Book) -> None:
-    pass   
+def show_detailed_info_sql_library(library: Library, book: Book ) -> None:
+    if not book:
+        print("Book not found.")
+        return None
 
+    fetched_book =  library.storage.get_book_details(book)
+
+    for key, value in fetched_book.items():
+        print(f"{key}: {value}")
 
 def search_and_add_book(client : GoogleBooksClient, library: Library):
     user_input = input("What book are you looking for?: ")

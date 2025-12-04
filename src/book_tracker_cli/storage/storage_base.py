@@ -12,3 +12,7 @@ class LibraryStorage:
 
     def remove (self, index: int) -> None:
         raise NotImplementedError
+    
+    
+    def get_book_details(self, book: Book) -> dict:
+        raise NotImplementedError

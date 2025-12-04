@@ -94,7 +94,7 @@ class SqlLibraryStorage(LibraryStorage):
         )
     
 
-    def fetch_book_info_by_google_id(self, book: Book) -> dict:
+    def get_book_details(self, book: Book) -> dict:
         with get_connection() as conn:
             cursor = conn.execute(
                 """
