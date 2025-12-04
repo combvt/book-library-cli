@@ -1,6 +1,6 @@
 from .storage_base import LibraryStorage
-from db import get_connection, init_db
-from models import Book
+from book_tracker_cli.db import get_connection, init_db
+from book_tracker_cli.models import Book
 
 class SqlLibraryStorage(LibraryStorage):
     def __init__(self, db_path="books.db"):
