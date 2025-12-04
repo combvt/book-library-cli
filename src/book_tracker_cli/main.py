@@ -8,7 +8,8 @@ from book_tracker_cli.storage.sql_storage import SqlLibraryStorage
 
 #TODO Add a BookWithMetaData class, storing book + sql info (date_added, 
 # index in sql, etc.)
-
+#TODO handle typeError when book not found when calling get_book_details()
+# in SqlStorage
 #TODO Add DB_PATH to .env
 #TODO update changelog
 load_dotenv()
@@ -73,7 +74,7 @@ def show_detailed_info(book: Book | None) -> None:
     print(book.detailed_text())
 
 
-def show_detailed_info_sql_library(library: Library, book: Book ) -> None:
+def show_detailed_info_library(library: Library, book: Book ) -> None:
     if not book:
         print("Book not found.")
         return None
@@ -82,6 +83,7 @@ def show_detailed_info_sql_library(library: Library, book: Book ) -> None:
 
     for key, value in fetched_book.items():
         print(f"{key}: {value}")
+
 
 def search_and_add_book(client : GoogleBooksClient, library: Library):
     user_input = input("What book are you looking for?: ")
