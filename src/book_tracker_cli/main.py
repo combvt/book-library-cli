@@ -6,10 +6,15 @@ from book_tracker_cli.api_client import GoogleBooksClient
 from book_tracker_cli.storage.json_storage import JsonLibraryStorage
 from book_tracker_cli.storage.sql_storage import SqlLibraryStorage
 
-
-
-# TODO add view detailed info in library
-
+#TODO Add a BookWithMetaData class, storing book + sql info (date_added, 
+# index in sql, etc.)
+#TODO handle typeError when book not found when calling get_book_details()
+# in SqlStorage
+#TODO Add DB_PATH to .env
+#TODO update changelog
+#TODO move helper functions outside of maine (utils.py)
+#TODO check for indexErrors, ValueErrors, typeErrors
+#TODO add get_string_from_user function
 load_dotenv()
 
 API_KEY = os.getenv("API_KEY")
@@ -55,6 +60,16 @@ def choose_book_from_list(book_list: list[Book], choice: str) -> Book | None:
     return book_list[idx]
 
 
+def get_int_from_user(prompt: str) -> int | None:
+    user_input = input(prompt).strip()
+
+    if not user_input.isdigit():
+        print("Invalid input. Please enter a number.")
+        print()
+        return
+    
+    return int(user_input)
+
 def show_library(library: Library):
     if library.is_empty():
         print("Your library is empty.")
@@ -70,6 +85,20 @@ def show_detailed_info(book: Book | None) -> None:
         return None
     
     print(book.detailed_text())
+
+
+def show_detailed_info_library(library: Library, book: Book ) -> None:
+    if not book:
+        print("Book not found.")
+        return None
+
+    fetched_book =  library.storage.get_book_details(book)
+
+    for key, value in fetched_book.items():
+        print(f"{key}: {value}")
+
+    print()
+
 
 def search_and_add_book(client : GoogleBooksClient, library: Library):
     user_input = input("What book are you looking for?: ")
@@ -121,7 +150,7 @@ def manage_library(library: Library) -> str | None:
 
         user_input = input(
             "Type 'remove' to remove a book, 'search' to search again, " 
-            "or 'quit' to quit: "
+            "'detailed' to view detailed info, or 'quit' to quit: "
         ).strip().lower()
 
         if user_input == "remove":
@@ -129,42 +158,47 @@ def manage_library(library: Library) -> str | None:
                 show_library(library)
                 print()
 
-                book_index_str = input("Which book do you want to remove?: ").strip()
+                book_index = get_int_from_user("Which book do you want to remove?: ")
                 print()
 
-                if not book_index_str.isdigit():
-                    print("Invalid input. Please enter a number.")
-                    continue
+                if book_index:
+                    library.remove(book_index - 1)
+                    print()
 
-                book_index = int(book_index_str)
-
-                library.remove(book_index - 1)
-                print()
-
-                continue_removing = input(
-                    "Type 'remove' to remove another book, "
-                    "'search' to search again, "
-                    "or 'quit' to quit: "
-                ).strip().lower()
-                
-                if continue_removing == "remove" and not library.is_empty():
-                    continue
-                elif continue_removing == "search":
-                    return "again"
-                elif continue_removing == "quit":
-                    return "quit"
-                else:
-                    print("Your library is empty.")
-                    return
+                    continue_removing = input(
+                        "Type 'remove' to remove another book, "
+                        "'search' to search again, "
+                        "or 'quit' to quit: "
+                    ).strip().lower()
+                    
+                    if continue_removing == "remove" and not library.is_empty():
+                        continue
+                    elif continue_removing == "search":
+                        return "again"
+                    elif continue_removing == "quit":
+                        return "quit"
+                    else:
+                        print("Your library is empty.")
+                        return
 
         elif user_input == "search":
             return "again"
-        else:
+        elif user_input == "detailed":
+            show_library(library)
+            print()
+
+            book_index = get_int_from_user("What book do you want to view detailed info for?: ")
+
+            if book_index:
+                book = library.books[book_index - 1]
+
+                show_detailed_info_library(library, book)
+        elif user_input == "quit":
             return "quit"
+        else:
+            print("Invalid input. ")
+            continue
  
-
-
-
 
 def main():
     library = choose_storage()

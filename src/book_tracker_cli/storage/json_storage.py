@@ -6,10 +6,12 @@ class JsonLibraryStorage(LibraryStorage):
     def __init__(self, path: str):
         self.path = path
 
+
     def load_all(self) -> list[Book]:
         try:
             with open(self.path, "r", encoding="utf-8") as f:
                 raw = json.load(f)
+
             if not isinstance(raw, list):
                 raise ValueError("The library file must contain a list")
             
@@ -38,8 +40,6 @@ class JsonLibraryStorage(LibraryStorage):
         self._save(books_list)
     
 
-
-     
     def _save(self, book_list: list[Book]) -> None:
         with open(self.path, "w", encoding="utf-8") as f:
             json.dump(
@@ -48,3 +48,10 @@ class JsonLibraryStorage(LibraryStorage):
                 indent=4,
                 ensure_ascii=False,
             )
+    
+
+    def get_book_details(self, book: Book) -> dict | None:
+        books = self.load_all()
+        
+        return next((item.to_dict() for item in books if item.to_dict().get("ID") == book.book_id), None)
+        

@@ -92,6 +92,32 @@ class SqlLibraryStorage(LibraryStorage):
             date_published=row_date_published,
             isbn=row_isbn,
         )
+    
+
+    def get_book_details(self, book: Book) -> dict:
+        with get_connection() as conn:
+            cursor = conn.execute(
+                """
+                SELECT id, title, author, description, categories,
+                page_count, date_published, google_id, isbn, created_at FROM books
+                WHERE google_id = ?
+                """,
+                (book.book_id,)
+            )
+            row = cursor.fetchone()
+
+        return {
+            "sql_index": row[0],
+            "Title": row[1],
+            "Author": row[2],
+            "Description": row[3],
+            "Categories": row[4],
+            "Page count": row[5],
+            "Date Published": row[6],
+            "ID": row[7],
+            "isbn": row[8],
+            "created_at": row[9],
+        }
 
 
     
