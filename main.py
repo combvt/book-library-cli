@@ -6,6 +6,10 @@ from api_client import GoogleBooksClient
 from storage.json_storage import JsonLibraryStorage
 from storage.sql_storage import SqlLibraryStorage
 
+
+
+# TODO add view detailed info in library
+
 load_dotenv()
 
 API_KEY = os.getenv("API_KEY")
@@ -110,7 +114,7 @@ def search_and_add_book(client : GoogleBooksClient, library: Library):
             return
 
 
-def manage_library(library: Library):
+def manage_library(library: Library) -> str | None:
     while True:
         show_library(library)
         print()
