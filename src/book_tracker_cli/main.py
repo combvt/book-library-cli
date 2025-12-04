@@ -158,38 +158,46 @@ def manage_library(library: Library) -> str | None:
                 show_library(library)
                 print()
 
-                book_index_str = input("Which book do you want to remove?: ").strip()
+                book_index = get_int_from_user("Which book do you want to remove?: ")
                 print()
 
-                if not book_index_str.isdigit():
-                    print("Invalid input. Please enter a number.")
-                    continue
+                if book_index:
+                    library.remove(book_index - 1)
+                    print()
 
-                book_index = int(book_index_str)
-
-                library.remove(book_index - 1)
-                print()
-
-                continue_removing = input(
-                    "Type 'remove' to remove another book, "
-                    "'search' to search again, "
-                    "or 'quit' to quit: "
-                ).strip().lower()
-                
-                if continue_removing == "remove" and not library.is_empty():
-                    continue
-                elif continue_removing == "search":
-                    return "again"
-                elif continue_removing == "quit":
-                    return "quit"
-                else:
-                    print("Your library is empty.")
-                    return
+                    continue_removing = input(
+                        "Type 'remove' to remove another book, "
+                        "'search' to search again, "
+                        "or 'quit' to quit: "
+                    ).strip().lower()
+                    
+                    if continue_removing == "remove" and not library.is_empty():
+                        continue
+                    elif continue_removing == "search":
+                        return "again"
+                    elif continue_removing == "quit":
+                        return "quit"
+                    else:
+                        print("Your library is empty.")
+                        return
 
         elif user_input == "search":
             return "again"
-        else:
+        elif user_input == "detailed":
+            show_library(library)
+            print()
+
+            book_index = get_int_from_user("What book do you want to view detailed info for?: ")
+
+            if book_index:
+                book = library.books[book_index - 1]
+
+                show_detailed_info_library(library, book)
+        elif user_input == "quit":
             return "quit"
+        else:
+            print("Invalid input. ")
+            continue
  
 
 def main():
