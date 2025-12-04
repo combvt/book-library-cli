@@ -6,10 +6,11 @@ from book_tracker_cli.api_client import GoogleBooksClient
 from book_tracker_cli.storage.json_storage import JsonLibraryStorage
 from book_tracker_cli.storage.sql_storage import SqlLibraryStorage
 
+#TODO Add a BookWithMetaData class, storing book + sql info (date_added, 
+# index in sql, etc.)
 
-
-# TODO add view detailed info in library
-
+#TODO Add DB_PATH to .env
+#TODO update changelog
 load_dotenv()
 
 API_KEY = os.getenv("API_KEY")
@@ -71,6 +72,11 @@ def show_detailed_info(book: Book | None) -> None:
     
     print(book.detailed_text())
 
+
+def show_detailed_info_sql_library(book: Book) -> None:
+    pass   
+
+
 def search_and_add_book(client : GoogleBooksClient, library: Library):
     user_input = input("What book are you looking for?: ")
     books = client.search_books(user_input)
@@ -121,7 +127,7 @@ def manage_library(library: Library) -> str | None:
 
         user_input = input(
             "Type 'remove' to remove a book, 'search' to search again, " 
-            "or 'quit' to quit: "
+            "'detailed' to view detailed info, or 'quit' to quit: "
         ).strip().lower()
 
         if user_input == "remove":
@@ -162,9 +168,6 @@ def manage_library(library: Library) -> str | None:
         else:
             return "quit"
  
-
-
-
 
 def main():
     library = choose_storage()
