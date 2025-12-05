@@ -128,4 +128,6 @@ class SqlLibraryStorage(LibraryStorage):
 
     
     def get_with_metadata(self, book: Book) -> BookWithMetadata:
-        raise NotImplementedError
+        row = self._fetch_row_by_book(book)
+
+        return BookWithMetadata.from_row(row, book)
