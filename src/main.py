@@ -1,10 +1,10 @@
 import os
 from dotenv import load_dotenv
-from book_tracker_cli.models import Book
-from book_tracker_cli.library import Library
-from book_tracker_cli.api_client import GoogleBooksClient
-from book_tracker_cli.storage.json_storage import JsonLibraryStorage
-from book_tracker_cli.storage.sql_storage import SqlLibraryStorage
+from models import Book
+from library import Library
+from api_client import GoogleBooksClient
+from storage.json_storage import JsonLibraryStorage
+from storage.sql_storage import SqlLibraryStorage
 
 #TODO Add a BookWithMetaData class, storing book + sql info (date_added, 
 # index in sql, etc.)

@@ -1,5 +1,5 @@
-from book_tracker_cli.models import Book
-from book_tracker_cli.storage.storage_base import LibraryStorage
+from models import Book
+from storage.storage_base import LibraryStorage
 
 class Library:
     def __init__(self, storage: LibraryStorage) -> None:
