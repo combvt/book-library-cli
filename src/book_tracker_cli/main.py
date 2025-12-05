@@ -15,6 +15,8 @@ from book_tracker_cli.storage.sql_storage import SqlLibraryStorage
 #TODO move helper functions outside of maine (utils.py)
 #TODO check for indexErrors, ValueErrors, typeErrors
 #TODO add get_string_from_user function
+#TODO maybe add a delay after showing detailed info in library 
+#so the info is not covered by show books
 load_dotenv()
 
 API_KEY = os.getenv("API_KEY")
