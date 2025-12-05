@@ -21,6 +21,12 @@ def get_int_from_user(prompt: str) -> int | None:
     return int(user_input)
 
 
+def get_string_from_user(prompt: str) -> str:
+    user_input = input(prompt).strip().lower()
+    
+    return user_input
+
+
 def show_library(library: Library):
     if library.is_empty():
         print("Your library is empty.")
@@ -76,7 +82,7 @@ def show_searched_books(books: list[Book]) -> None:
 
 def choose_storage() -> Library:
     while True:
-        chosen_storage = input("Choose storage type: 'json' or 'sql': ").strip().lower()
+        chosen_storage = get_string_from_user("Choose storage type: 'json' or 'sql': ")
 
         if chosen_storage == "json":
             library = JsonLibraryStorage(LIBRARY_PATH)
