@@ -131,13 +131,17 @@ def manage_library(library: Library) -> str | None:
             book_index = utils.get_int_from_user("What book do you want to view detailed info for?: ")
 
             if book_index:
-                book = library.books[book_index - 1]
+                try:
+                    book = library.books[book_index - 1]
+                except IndexError:
+                    print("Index out of range.")
+                    continue
 
                 utils.show_detailed_info_library(library, book)
         elif user_input == "quit":
             return "quit"
         else:
-            print("Invalid input. ")
+            print("Invalid input.")
             continue
  
 
