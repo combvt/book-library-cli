@@ -2,12 +2,11 @@ from models import Book
 from library import Library
 from storage.sql_storage import SqlLibraryStorage
 from storage.json_storage import JsonLibraryStorage
+from db import DB_PATH
 import os
 
 API_KEY = os.getenv("API_KEY")
 LIBRARY_PATH = os.getenv("LIBRARY_PATH", "book_library.json")
-
-
 
 
 def get_int_from_user(prompt: str) -> int | None:
@@ -16,14 +15,15 @@ def get_int_from_user(prompt: str) -> int | None:
     if not user_input.isdigit():
         print("Invalid input. Please enter a number.")
         print()
-        return
+
+        return None
     
     return int(user_input)
 
 
 def get_string_from_user(prompt: str) -> str:
     user_input = input(prompt).strip().lower()
-    
+
     return user_input
 
 
@@ -44,8 +44,8 @@ def show_detailed_info(book: Book | None) -> None:
     print(book.detailed_text())
 
 
-def show_detailed_info_library(library: Library, book: Book ) -> None:
-    if not book:
+def show_detailed_info_library(library: Library, book: Book | None) -> None:
+    if book is None:
         print("Book not found.")
         return None
 
@@ -66,14 +66,15 @@ def choose_book_from_list(book_list: list[Book], choice: str) -> Book | None:
     
     if idx >= len(book_list) or idx < 0:
         print("Choice out of range.")
-        return 
+        return None
     
     return book_list[idx]
 
 
 def show_searched_books(books: list[Book]) -> None:
     if not books:
-        print("No results found\n")
+        print("No results found")
+        print()
         return None
     
     for index ,item in enumerate(books, start=1):
@@ -88,7 +89,7 @@ def choose_storage() -> Library:
             library = JsonLibraryStorage(LIBRARY_PATH)
             return Library(library)
         elif chosen_storage == "sql":
-            library = SqlLibraryStorage("books.db")
+            library = SqlLibraryStorage(DB_PATH)
             return Library(library)
         else:
             print("Invalid option. Please type either 'json' or 'sql'.")
