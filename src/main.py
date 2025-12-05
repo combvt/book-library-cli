@@ -6,8 +6,6 @@ import utils
 #TODO Add a BookWithMetaData class, storing book + sql info (date_added, 
 # index in sql, etc.)
 #TODO update changelog
-#TODO maybe add a delay after showing detailed info in library 
-#so the info is not covered by show books
 load_dotenv()
 
 if not utils.API_KEY:
@@ -138,6 +136,7 @@ def manage_library(library: Library) -> str | None:
                     continue
 
                 utils.show_detailed_info_library(library, book)
+                utils.stand_by()
         elif user_input == "quit":
             return "quit"
         else:
