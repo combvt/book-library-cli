@@ -95,3 +95,21 @@ class Book:
         f"isbn: {self.isbn}\n"
     )
  
+
+class BookWithMetadata:
+    def __init__(self, raw_book: Book, sql_index: int, created_at: str) -> None:
+        self.raw_book = raw_book
+        self.sql_index = sql_index
+        self.created_at = created_at
+
+
+    @classmethod
+    def from_row(cls, row: tuple, book: Book) -> BookWithMetadata:
+        book_sql_index = row[0]
+        book_created_at = row[9]
+
+        return cls(
+            raw_book = book,
+            sql_index = book_sql_index,
+            created_at = book_created_at,
+        )
