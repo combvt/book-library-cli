@@ -1,6 +1,7 @@
 from .storage_base import LibraryStorage
 from db import get_connection, init_db
-from models import Book
+from models import Book, BookWithMetadata
+
 
 class SqlLibraryStorage(LibraryStorage):
     def __init__(self, db_path="books.db"):
@@ -71,7 +72,6 @@ class SqlLibraryStorage(LibraryStorage):
             conn.execute("DELETE FROM books WHERE id = ?", (book_id,))
 
 
-
     def _row_to_book(self, row: tuple) -> Book:
         row_title = row[0]
         row_google_id = row[1]
@@ -94,7 +94,7 @@ class SqlLibraryStorage(LibraryStorage):
         )
     
 
-    def get_book_details(self, book: Book) -> dict:
+    def _fetch_row_by_book(self, book: Book) -> tuple:
         with get_connection() as conn:
             cursor = conn.execute(
                 """
@@ -105,6 +105,12 @@ class SqlLibraryStorage(LibraryStorage):
                 (book.book_id,)
             )
             row = cursor.fetchone()
+
+            return row
+
+
+    def get_book_details(self, book: Book) -> dict:
+        row = self._fetch_row_by_book(book)
 
         return {
             "sql_index": row[0],
@@ -121,3 +127,5 @@ class SqlLibraryStorage(LibraryStorage):
 
 
     
+    def get_with_metadata(self, book: Book) -> BookWithMetadata:
+        raise NotImplementedError
