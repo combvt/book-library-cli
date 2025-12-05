@@ -2,7 +2,7 @@ from .storage_base import LibraryStorage
 from db import get_connection, init_db
 from models import Book, BookWithMetadata
 
-
+#TODO replace code now that i have bookwithmetadata class
 class SqlLibraryStorage(LibraryStorage):
     def __init__(self, db_path="books.db"):
         self.path = db_path
@@ -124,7 +124,6 @@ class SqlLibraryStorage(LibraryStorage):
             "isbn": row[8],
             "created_at": row[9],
         }
-
 
     
     def get_with_metadata(self, book: Book) -> BookWithMetadata:
