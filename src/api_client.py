@@ -1,4 +1,4 @@
-from book_tracker_cli.models import Book
+from models import Book
 import requests
 
 BOOK_URL = "https://www.googleapis.com/books/v1/volumes"
