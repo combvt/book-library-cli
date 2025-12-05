@@ -4,6 +4,7 @@ from storage.sql_storage import SqlLibraryStorage
 from storage.json_storage import JsonLibraryStorage
 from db import DB_PATH
 import os
+import msvcrt
 
 API_KEY = os.getenv("API_KEY")
 LIBRARY_PATH = os.getenv("LIBRARY_PATH", "book_library.json")
@@ -94,5 +95,9 @@ def choose_storage() -> Library:
         else:
             print("Invalid option. Please type either 'json' or 'sql'.")
 
+
+def stand_by():
+    print("Press any key to continue...")
+    msvcrt.getch()
 
 
