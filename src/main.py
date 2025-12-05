@@ -8,7 +8,6 @@ import utils
 # in SqlStorage
 #TODO update changelog
 #TODO check for indexErrors, ValueErrors, typeErrors
-#TODO add get_string_from_user function
 #TODO maybe add a delay after showing detailed info in library 
 #so the info is not covered by show books
 load_dotenv()
@@ -18,7 +17,7 @@ if not utils.API_KEY:
 
 
 def search_and_add_book(client : GoogleBooksClient, library: Library):
-    user_input = input("What book are you looking for?: ")
+    user_input = utils.get_string_from_user("What book are you looking for?: ")
     books = client.search_books(user_input)
 
     if not books:
@@ -28,13 +27,13 @@ def search_and_add_book(client : GoogleBooksClient, library: Library):
     utils.show_searched_books(books)
 
     while True:
-        user_choice = input("\nWhich book do you want to add to your library?: ").strip()
+        user_choice = utils.get_string_from_user("\nWhich book do you want to add to your library?: ")
         chosen_book = utils.choose_book_from_list(books, user_choice)
 
         if chosen_book is not None:
-            add_or_view = input(
+            add_or_view = utils.get_string_from_user(
                 "Type 'add', 'detailed' or 'again' to add, view detailed info or search again: "
-            ).strip().lower()
+            )
             print()
 
             if add_or_view == "add":
@@ -44,7 +43,7 @@ def search_and_add_book(client : GoogleBooksClient, library: Library):
                 print()
                 utils.show_detailed_info(chosen_book)
 
-                answer = input("Type 'add' or 'back' to add or go back: ").strip().lower()
+                answer = utils.get_string_from_user("Type 'add' or 'back' to add or go back: ")
                 print()
 
                 if answer == "add":
@@ -65,10 +64,10 @@ def manage_library(library: Library) -> str | None:
         utils.show_library(library)
         print()
 
-        user_input = input(
+        user_input = utils.get_string_from_user(
             "Type 'remove' to remove a book, 'search' to search again, " 
             "'detailed' to view detailed info, or 'quit' to quit: "
-        ).strip().lower()
+        )
 
         if user_input == "remove":
             while True:
@@ -82,11 +81,11 @@ def manage_library(library: Library) -> str | None:
                     library.remove(book_index - 1)
                     print()
 
-                    continue_removing = input(
+                    continue_removing = utils.get_string_from_user(
                         "Type 'remove' to remove another book, "
                         "'search' to search again, "
                         "or 'quit' to quit: "
-                    ).strip().lower()
+                    )
                     
                     if continue_removing == "remove" and not library.is_empty():
                         continue
@@ -127,9 +126,9 @@ def main():
         if user_answer == "again":
             continue
     
-        action = input(
+        action = utils.get_string_from_user(
             "Do you want to search again? 'yes' or 'no', or 'view' your library: "
-        ).strip().lower()
+        )
 
         if action == "no":
             break
@@ -141,7 +140,7 @@ def main():
             elif answer == "quit":
                 break
             else:
-                user_input = input("Do you want to search again? 'yes' or 'no': ")
+                user_input = utils.get_string_from_user("Do you want to search again? 'yes' or 'no': ")
 
                 if user_input == "no":
                     break
