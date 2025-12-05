@@ -1,105 +1,20 @@
-import os
 from dotenv import load_dotenv
-from models import Book
 from library import Library
 from api_client import GoogleBooksClient
-from storage.json_storage import JsonLibraryStorage
-from storage.sql_storage import SqlLibraryStorage
-
+import utils
 #TODO Add a BookWithMetaData class, storing book + sql info (date_added, 
 # index in sql, etc.)
 #TODO handle typeError when book not found when calling get_book_details()
 # in SqlStorage
-#TODO Add DB_PATH to .env
 #TODO update changelog
-#TODO move helper functions outside of maine (utils.py)
 #TODO check for indexErrors, ValueErrors, typeErrors
 #TODO add get_string_from_user function
 #TODO maybe add a delay after showing detailed info in library 
 #so the info is not covered by show books
 load_dotenv()
 
-API_KEY = os.getenv("API_KEY")
-LIBRARY_PATH = os.getenv("LIBRARY_PATH", "book_library.json")
-
-if not API_KEY:
+if not utils.API_KEY:
     raise ValueError("Missing API KEY. Make sure to create your .env file.")
-
-def choose_storage() -> Library:
-    while True:
-        chosen_storage = input("Choose storage type: 'json' or 'sql': ").strip().lower()
-
-        if chosen_storage == "json":
-            library = JsonLibraryStorage(LIBRARY_PATH)
-            return Library(library)
-        elif chosen_storage == "sql":
-            library = SqlLibraryStorage("books.db")
-            return Library(library)
-        else:
-            print("Invalid option. Please type either 'json' or 'sql'.")
-
-
-def show_searched_books(books: list[Book]) -> None:
-    if not books:
-        print("No results found\n")
-        return None
-    
-    for index ,item in enumerate(books, start=1):
-        print(f"{index}. {item.short_line()}")
-
-
-def choose_book_from_list(book_list: list[Book], choice: str) -> Book | None:
-    try:
-        idx = int(choice) - 1
-    except (TypeError, ValueError):
-        print("Invalid input, please enter a number.")
-        return None
-    
-    if idx >= len(book_list) or idx < 0:
-        print("Choice out of range.")
-        return 
-    
-    return book_list[idx]
-
-
-def get_int_from_user(prompt: str) -> int | None:
-    user_input = input(prompt).strip()
-
-    if not user_input.isdigit():
-        print("Invalid input. Please enter a number.")
-        print()
-        return
-    
-    return int(user_input)
-
-def show_library(library: Library):
-    if library.is_empty():
-        print("Your library is empty.")
-        return
-    
-    for index, book in enumerate(library.books, start=1):
-        print(f"{index}. {book.title} -- {book.author} ({book.date_published})")
-
-
-def show_detailed_info(book: Book | None) -> None:
-    if not book:
-        print("Detailed info not found.")
-        return None
-    
-    print(book.detailed_text())
-
-
-def show_detailed_info_library(library: Library, book: Book ) -> None:
-    if not book:
-        print("Book not found.")
-        return None
-
-    fetched_book =  library.storage.get_book_details(book)
-
-    for key, value in fetched_book.items():
-        print(f"{key}: {value}")
-
-    print()
 
 
 def search_and_add_book(client : GoogleBooksClient, library: Library):
@@ -107,14 +22,14 @@ def search_and_add_book(client : GoogleBooksClient, library: Library):
     books = client.search_books(user_input)
 
     if not books:
-        show_searched_books(books)
+        utils.show_searched_books(books)
         return
     
-    show_searched_books(books)
+    utils.show_searched_books(books)
 
     while True:
         user_choice = input("\nWhich book do you want to add to your library?: ").strip()
-        chosen_book = choose_book_from_list(books, user_choice)
+        chosen_book = utils.choose_book_from_list(books, user_choice)
 
         if chosen_book is not None:
             add_or_view = input(
@@ -127,7 +42,7 @@ def search_and_add_book(client : GoogleBooksClient, library: Library):
                 break
             elif add_or_view == "detailed":
                 print()
-                show_detailed_info(chosen_book)
+                utils.show_detailed_info(chosen_book)
 
                 answer = input("Type 'add' or 'back' to add or go back: ").strip().lower()
                 print()
@@ -137,7 +52,7 @@ def search_and_add_book(client : GoogleBooksClient, library: Library):
                     break
                 else:
                     print()
-                    show_searched_books(books)
+                    utils.show_searched_books(books)
                     continue
             elif add_or_view == "again":
                 return "again"            
@@ -147,7 +62,7 @@ def search_and_add_book(client : GoogleBooksClient, library: Library):
 
 def manage_library(library: Library) -> str | None:
     while True:
-        show_library(library)
+        utils.show_library(library)
         print()
 
         user_input = input(
@@ -157,10 +72,10 @@ def manage_library(library: Library) -> str | None:
 
         if user_input == "remove":
             while True:
-                show_library(library)
+                utils.show_library(library)
                 print()
 
-                book_index = get_int_from_user("Which book do you want to remove?: ")
+                book_index = utils.get_int_from_user("Which book do you want to remove?: ")
                 print()
 
                 if book_index:
@@ -186,15 +101,15 @@ def manage_library(library: Library) -> str | None:
         elif user_input == "search":
             return "again"
         elif user_input == "detailed":
-            show_library(library)
+            utils.show_library(library)
             print()
 
-            book_index = get_int_from_user("What book do you want to view detailed info for?: ")
+            book_index = utils.get_int_from_user("What book do you want to view detailed info for?: ")
 
             if book_index:
                 book = library.books[book_index - 1]
 
-                show_detailed_info_library(library, book)
+                utils.show_detailed_info_library(library, book)
         elif user_input == "quit":
             return "quit"
         else:
@@ -203,8 +118,8 @@ def manage_library(library: Library) -> str | None:
  
 
 def main():
-    library = choose_storage()
-    client = GoogleBooksClient(API_KEY)
+    library = utils.choose_storage()
+    client = GoogleBooksClient(utils.API_KEY)
     
     while True:
         user_answer = search_and_add_book(client, library)
