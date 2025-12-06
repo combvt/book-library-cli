@@ -171,7 +171,14 @@ def view_library_inner_flow(library: Library) -> str | None:
 def main():
     library = utils.choose_storage()
     client = GoogleBooksClient(utils.API_KEY)
-    choice = input("Type 'search' or 'view' to search books or view your library: ")
+
+    while True:
+        choice = utils.get_string_from_user("Type 'search' or 'view' to search books or view your library: ")
+
+        if choice in ("search", "view"):
+            break
+        
+        print("Invalid option.")
     while True:
 
         if choice == "quit":
