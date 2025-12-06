@@ -117,7 +117,7 @@ class BookWithMetadata:
         )
     
     
-    def book_with_metadata_detailed_text(self) -> str:
+    def detailed_text(self) -> str:
         return (
             f"sql index: {self.sql_index}\n"
             f"{self.raw_book.detailed_text()}"

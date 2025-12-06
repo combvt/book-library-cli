@@ -61,7 +61,7 @@ def show_detailed_info_library(library: Library, book: Book) -> None:
     elif isinstance(library.storage, SqlLibraryStorage):
         fetched_book = library.storage.get_with_metadata(book)
 
-        print(fetched_book.book_with_metadata_detailed_text())
+        print(fetched_book.detailed_text())
         
 
     print()
