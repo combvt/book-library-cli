@@ -50,8 +50,6 @@ class JsonLibraryStorage(LibraryStorage):
             )
     
 
-    def get_book_details(self, book: Book) -> dict | None:
-        books = self.load_all()
-        
-        return next((item.to_dict() for item in books if item.to_dict().get("ID") == book.book_id), None)
+    def get_book_details(self, book: Book) -> str:
+        return book.detailed_text()
         

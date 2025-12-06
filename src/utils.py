@@ -53,9 +53,9 @@ def show_detailed_info_library(library: Library, book: Book) -> None:
     
     if isinstance(library.storage, JsonLibraryStorage):
         fetched_book =  library.storage.get_book_details(book)
+
         if fetched_book is not None:
-            for key, value in fetched_book.items():
-                print(f"{key}: {value}")
+            print(fetched_book)
         else:
             print("Book not found.")
             return

@@ -88,13 +88,15 @@ class Book:
     def detailed_text(self) -> str:
         return (
         f"Title: {self.title}\n"
-        f"Author: {self.author}\n"
+        f"ID: {self.book_id}\n"
+        f"Authors: {self.author}\n"
         f"Description: {self.description}\n"
+        f"Date Published: {self.date_published}\n"
         f"Page count: {self.page_count}\n"
         f"Categories: {self.categories}\n"
         f"isbn: {self.isbn}\n"
     )
- 
+
 
 class BookWithMetadata:
     def __init__(self, raw_book: Book, sql_index: int, created_at: str) -> None:
