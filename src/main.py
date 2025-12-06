@@ -3,9 +3,7 @@ from library import Library
 from api_client import GoogleBooksClient
 from models import Book
 import utils
-#TODO Add a BookWithMetaData class, storing book + sql info (date_added, 
-# index in sql, etc.)
-#TODO update changelog
+
 load_dotenv()
 
 if not utils.API_KEY:

@@ -88,10 +88,38 @@ class Book:
     def detailed_text(self) -> str:
         return (
         f"Title: {self.title}\n"
-        f"Author: {self.author}\n"
+        f"ID: {self.book_id}\n"
+        f"Authors: {self.author}\n"
         f"Description: {self.description}\n"
+        f"Date Published: {self.date_published}\n"
         f"Page count: {self.page_count}\n"
         f"Categories: {self.categories}\n"
         f"isbn: {self.isbn}\n"
     )
- 
+
+
+class BookWithMetadata:
+    def __init__(self, raw_book: Book, sql_index: int, created_at: str) -> None:
+        self.raw_book = raw_book
+        self.sql_index = sql_index
+        self.created_at = created_at
+
+
+    @classmethod
+    def from_row(cls, row: tuple, book: Book) -> BookWithMetadata:
+        book_sql_index = row[0]
+        book_created_at = row[9]
+
+        return cls(
+            raw_book = book,
+            sql_index = book_sql_index,
+            created_at = book_created_at,
+        )
+    
+    
+    def book_with_metadata_detailed_text(self) -> str:
+        return (
+            f"sql index: {self.sql_index}\n"
+            f"{self.raw_book.detailed_text()}"
+            f"created at: {self.created_at}\n"
+        )

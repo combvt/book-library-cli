@@ -1,4 +1,4 @@
-from models import Book
+from models import Book, BookWithMetadata
 from library import Library
 from storage.sql_storage import SqlLibraryStorage
 from storage.json_storage import JsonLibraryStorage
@@ -45,15 +45,24 @@ def show_detailed_info(book: Book | None) -> None:
     print(book.detailed_text())
 
 
-def show_detailed_info_library(library: Library, book: Book | None) -> None:
+def show_detailed_info_library(library: Library, book: Book) -> None:
     if book is None:
         print("Book not found.")
         return None
+    
+    if isinstance(library.storage, JsonLibraryStorage):
+        fetched_book =  library.storage.get_book_details(book)
 
-    fetched_book =  library.storage.get_book_details(book)
+        if fetched_book is not None:
+            print(fetched_book)
+        else:
+            print("Book not found.")
+            return
+    elif isinstance(library.storage, SqlLibraryStorage):
+        fetched_book = library.storage.get_with_metadata(book)
 
-    for key, value in fetched_book.items():
-        print(f"{key}: {value}")
+        print(fetched_book.book_with_metadata_detailed_text())
+        
 
     print()
 
