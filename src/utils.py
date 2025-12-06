@@ -44,8 +44,7 @@ def show_detailed_info(book: Book | None) -> None:
     
     print(book.detailed_text())
 
-#FIXME continue printing out bookwithmetadata info
-# Maybe look into using book.detailed_text() + 2 more lines of metadata
+
 def show_detailed_info_library(library: Library, book: Book) -> None:
     if book is None:
         print("Book not found.")
@@ -62,7 +61,7 @@ def show_detailed_info_library(library: Library, book: Book) -> None:
     elif isinstance(library.storage, SqlLibraryStorage):
         fetched_book = library.storage.get_with_metadata(book)
 
-        print()
+        print(fetched_book.book_with_metadata_detailed_text())
         
 
     print()

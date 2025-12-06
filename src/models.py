@@ -120,13 +120,6 @@ class BookWithMetadata:
     def book_with_metadata_detailed_text(self) -> str:
         return (
             f"sql index: {self.sql_index}\n"
-            f"Title: {self.raw_book.title}\n"
-            f"ID: {self.raw_book.book_id}\n"
-            f"Authors: {self.raw_book.author}\n"
-            f"Description: {self.raw_book.description}\n"
-            f"Date Published: {self.raw_book.date_published}\n"
-            f"Page count: {self.raw_book.page_count}\n"
-            f"Categories: {self.raw_book.categories}\n"
-            f"isbn: {self.raw_book.isbn}\n"
+            f"{self.raw_book.detailed_text()}"
             f"created at: {self.created_at}\n"
         )
