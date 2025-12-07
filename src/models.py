@@ -1,7 +1,8 @@
 class Book:
-    def __init__(self,
+    def __init__(
+        self,
         title: str,
-        book_id: str, 
+        book_id: str,
         author: str,
         page_count: int | str,
         description: str,
@@ -22,8 +23,10 @@ class Book:
     def from_api(cls, item: dict) -> Book:
         volume_info = item.get("volumeInfo", {})
         sample = volume_info.get("industryIdentifiers", {})
-        identifier = next((value for value in sample if value.get("type") == "ISBN_13"), {})
- 
+        identifier = next(
+            (value for value in sample if value.get("type") == "ISBN_13"), {}
+        )
+
         book_title = volume_info.get("title", "Unknown")
         book_id = item.get("id", "")
         book_author = ", ".join(volume_info.get("authors", ["Unknown author"]))
@@ -34,16 +37,15 @@ class Book:
         book_isbn = identifier.get("identifier", "Unknown ISBN")
 
         return cls(
-            title = book_title,
-            author = book_author,
-            date_published = book_published_date,
-            page_count = book_page_count,
-            description = book_description,
-            categories = book_category,
-            book_id = book_id,
-            isbn = book_isbn,
+            title=book_title,
+            author=book_author,
+            date_published=book_published_date,
+            page_count=book_page_count,
+            description=book_description,
+            categories=book_category,
+            book_id=book_id,
+            isbn=book_isbn,
         )
-
 
     @classmethod
     def from_dict(cls, data: dict) -> Book:
@@ -57,16 +59,15 @@ class Book:
         book_isbn = data.get("isbn", "Unknown ISBN")
 
         return cls(
-            title = book_title,
-            author = book_author,
-            date_published = book_published_date,
-            page_count = book_page_count,
-            description = book_description,
-            categories = book_category,
-            book_id = book_id,
-            isbn = book_isbn
+            title=book_title,
+            author=book_author,
+            date_published=book_published_date,
+            page_count=book_page_count,
+            description=book_description,
+            categories=book_category,
+            book_id=book_id,
+            isbn=book_isbn,
         )
-
 
     def to_dict(self) -> dict:
         return {
@@ -77,25 +78,23 @@ class Book:
             "Page Count": self.page_count,
             "Description": self.description,
             "Categories": self.categories,
-            "isbn": self.isbn
+            "isbn": self.isbn,
         }
-    
 
     def short_line(self) -> str:
         return f"{self.title} -- {self.author} ({self.date_published})"
-    
 
     def detailed_text(self) -> str:
         return (
-        f"Title: {self.title}\n"
-        f"ID: {self.book_id}\n"
-        f"Authors: {self.author}\n"
-        f"Description: {self.description}\n"
-        f"Date Published: {self.date_published}\n"
-        f"Page count: {self.page_count}\n"
-        f"Categories: {self.categories}\n"
-        f"isbn: {self.isbn}\n"
-    )
+            f"Title: {self.title}\n"
+            f"ID: {self.book_id}\n"
+            f"Authors: {self.author}\n"
+            f"Description: {self.description}\n"
+            f"Date Published: {self.date_published}\n"
+            f"Page count: {self.page_count}\n"
+            f"Categories: {self.categories}\n"
+            f"isbn: {self.isbn}\n"
+        )
 
 
 class BookWithMetadata:
@@ -104,19 +103,17 @@ class BookWithMetadata:
         self.sql_index = sql_index
         self.created_at = created_at
 
-
     @classmethod
     def from_row(cls, row: tuple, book: Book) -> BookWithMetadata:
         book_sql_index = row[0]
         book_created_at = row[9]
 
         return cls(
-            raw_book = book,
-            sql_index = book_sql_index,
-            created_at = book_created_at,
+            raw_book=book,
+            sql_index=book_sql_index,
+            created_at=book_created_at,
         )
-    
-    
+
     def detailed_text(self) -> str:
         return (
             f"sql index: {self.sql_index}\n"

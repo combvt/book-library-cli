@@ -10,66 +10,70 @@ if not utils.API_KEY:
     raise ValueError("Missing API KEY. Make sure to create your .env file.")
 
 
-
-def inner_flow(chosen_book: Book | None, library: Library, books: list[Book]) -> str | None:
-     while True:
-            if chosen_book is not None:
-                add_or_view = utils.get_string_from_user(
-                    "Type 'add', 'detailed' or 'again' to add, view detailed info or search again: "
-                )
-                print()
-
-                if add_or_view == "add":
-                    library.add(chosen_book)
-                    return None
-                elif add_or_view == "detailed":
-                    print()
-                    utils.show_detailed_info(chosen_book)
-
-                    while True:
-                        answer = utils.get_string_from_user("Type 'add' or 'back' to add or go back: ")
-                        print()
-
-                        if answer == "add":
-                            library.add(chosen_book)
-
-                            return None
-                        elif answer == "back":
-                            print()
-                            utils.show_searched_books(books)
-
-                            return "continue"
-                        else:
-                            print("Invalid option.")
-                            continue
-
-                elif add_or_view == "again":
-                    return "again"            
-            else:
-                return 
-
-
-
-def search_and_add_book(client : GoogleBooksClient, library: Library) -> str | None:
+def inner_flow(
+    chosen_book: Book | None, library: Library, books: list[Book]
+) -> str | None:
     while True:
-       user_input = utils.get_string_from_user("What book are you looking for?: ")
+        if chosen_book is not None:
+            add_or_view = utils.get_string_from_user(
+                "Type 'add', 'detailed' or 'again' to add, view detailed info or search again: "
+            )
+            print()
 
-       if not user_input:
-           print("Please type something.")
-           continue
-       else:
-           break
-       
+            if add_or_view == "add":
+                library.add(chosen_book)
+                return None
+            elif add_or_view == "detailed":
+                print()
+                utils.show_detailed_info(chosen_book)
+
+                while True:
+                    answer = utils.get_string_from_user(
+                        "Type 'add' or 'back' to add or go back: "
+                    )
+                    print()
+
+                    if answer == "add":
+                        library.add(chosen_book)
+
+                        return None
+                    elif answer == "back":
+                        print()
+                        utils.show_searched_books(books)
+
+                        return "continue"
+                    else:
+                        print("Invalid option.")
+                        continue
+
+            elif add_or_view == "again":
+                return "again"
+        else:
+            return
+
+
+def search_and_add_book(client: GoogleBooksClient, library: Library) -> str | None:
+    while True:
+        user_input = utils.get_string_from_user("What book are you looking for?: ")
+
+        if not user_input:
+            print("Please type something.")
+            continue
+        else:
+            break
+
     books = client.search_books(user_input)
 
     if not books:
         utils.show_searched_books(books)
         return
-    
+
     utils.show_searched_books(books)
 
     while True:
-        user_choice = utils.get_string_from_user("\nWhich book do you want to add to your library?: ")
+        user_choice = utils.get_string_from_user(
+            "\nWhich book do you want to add to your library?: "
+        )
         chosen_book = utils.choose_book_from_list(books, user_choice)
         result = inner_flow(chosen_book, library, books)
 
@@ -79,7 +83,6 @@ def search_and_add_book(client : GoogleBooksClient, library: Library) -> str | N
             continue
         elif result is None:
             return None
-      
 
 
 def manage_library(library: Library) -> str | None:
@@ -88,7 +91,7 @@ def manage_library(library: Library) -> str | None:
         print()
 
         user_input = utils.get_string_from_user(
-            "Type 'remove' to remove a book, 'search' to search again, " 
+            "Type 'remove' to remove a book, 'search' to search again, "
             "'detailed' to view detailed info, or 'quit' to quit: "
         )
 
@@ -97,7 +100,9 @@ def manage_library(library: Library) -> str | None:
                 utils.show_library(library)
                 print()
 
-                book_index = utils.get_int_from_user("Which book do you want to remove?: ")
+                book_index = utils.get_int_from_user(
+                    "Which book do you want to remove?: "
+                )
                 print()
 
                 if book_index:
@@ -109,7 +114,7 @@ def manage_library(library: Library) -> str | None:
                         "'search' to search again, "
                         "or 'quit' to quit: "
                     )
-                    
+
                     if continue_removing == "remove" and not library.is_empty():
                         continue
                     elif continue_removing == "search":
@@ -126,7 +131,9 @@ def manage_library(library: Library) -> str | None:
             utils.show_library(library)
             print()
 
-            book_index = utils.get_int_from_user("What book do you want to view detailed info for?: ")
+            book_index = utils.get_int_from_user(
+                "What book do you want to view detailed info for?: "
+            )
 
             if book_index:
                 try:
@@ -142,7 +149,7 @@ def manage_library(library: Library) -> str | None:
         else:
             print("Invalid input.")
             continue
- 
+
 
 def view_library_inner_flow(library: Library) -> str | None:
     answer = manage_library(library)
@@ -153,19 +160,16 @@ def view_library_inner_flow(library: Library) -> str | None:
         return "quit"
     else:
         while True:
-            user_input = utils.get_string_from_user("Do you want to search again? 'yes' or 'no': ")
+            user_input = utils.get_string_from_user(
+                "Do you want to search again? 'yes' or 'no': "
+            )
 
             if user_input == "no":
                 return "quit"
             elif user_input == "yes":
-                return "search" 
+                return "search"
             else:
                 print("Invalid input.")
-                
-
-       
-
-
 
 
 def main():
@@ -173,12 +177,15 @@ def main():
     client = GoogleBooksClient(utils.API_KEY)
 
     while True:
-        choice = utils.get_string_from_user("Type 'search' or 'view' to search books or view your library: ")
+        choice = utils.get_string_from_user(
+            "Type 'search' or 'view' to search books or view your library: "
+        )
 
         if choice in ("search", "view"):
             break
-        
+
         print("Invalid option.")
+
     while True:
 
         if choice == "quit":
@@ -211,12 +218,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-            
-
-
-
-
-
-
-
-    

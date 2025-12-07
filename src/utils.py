@@ -18,7 +18,7 @@ def get_int_from_user(prompt: str) -> int | None:
         print()
 
         return None
-    
+
     return int(user_input)
 
 
@@ -32,7 +32,7 @@ def show_library(library: Library):
     if library.is_empty():
         print("Your library is empty.")
         return
-    
+
     for index, book in enumerate(library.books, start=1):
         print(f"{index}. {book.title} -- {book.author} ({book.date_published})")
 
@@ -41,7 +41,7 @@ def show_detailed_info(book: Book | None) -> None:
     if not book:
         print("Detailed info not found.")
         return None
-    
+
     print(book.detailed_text())
 
 
@@ -49,9 +49,9 @@ def show_detailed_info_library(library: Library, book: Book) -> None:
     if book is None:
         print("Book not found.")
         return None
-    
+
     if isinstance(library.storage, JsonLibraryStorage):
-        fetched_book =  library.storage.get_book_details(book)
+        fetched_book = library.storage.get_book_details(book)
 
         if fetched_book is not None:
             print(fetched_book)
@@ -62,7 +62,6 @@ def show_detailed_info_library(library: Library, book: Book) -> None:
         fetched_book = library.storage.get_with_metadata(book)
 
         print(fetched_book.detailed_text())
-        
 
     print()
 
@@ -73,11 +72,11 @@ def choose_book_from_list(book_list: list[Book], choice: str) -> Book | None:
     except (TypeError, ValueError):
         print("Invalid input, please enter a number.")
         return None
-    
+
     if idx >= len(book_list) or idx < 0:
         print("Choice out of range.")
         return None
-    
+
     return book_list[idx]
 
 
@@ -86,8 +85,8 @@ def show_searched_books(books: list[Book]) -> None:
         print("No results found")
         print()
         return None
-    
-    for index ,item in enumerate(books, start=1):
+
+    for index, item in enumerate(books, start=1):
         print(f"{index}. {item.short_line()}")
 
 
@@ -108,5 +107,3 @@ def choose_storage() -> Library:
 def stand_by():
     print("Press any key to continue...")
     msvcrt.getch()
-
-

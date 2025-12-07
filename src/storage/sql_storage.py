@@ -8,20 +8,18 @@ class SqlLibraryStorage(LibraryStorage):
         self.path = db_path
         init_db()
 
-
     def load_all(self) -> list[Book]:
         with get_connection() as conn:
             cursor = conn.execute(
-                        """
+                """
                         SELECT title, google_id, author, page_count, description,
                         categories, date_published, isbn FROM books 
                         ORDER BY id ASC
                         """
-                    )
+            )
             rows = cursor.fetchall()
 
         return [self._row_to_book(row) for row in rows]
-
 
     def add(self, book: Book) -> None:
         with get_connection() as conn:
@@ -47,30 +45,27 @@ class SqlLibraryStorage(LibraryStorage):
                     book.description,
                     book.categories,
                     book.date_published,
-                    book.isbn
-                )
+                    book.isbn,
+                ),
             )
-
-
-
 
     def remove(self, index: int) -> None:
         with get_connection() as conn:
             cursor = conn.execute(
-                    """
+                """
                     SELECT id FROM books ORDER BY id ASC
-                    """)
+                    """
+            )
             rows = cursor.fetchall()
 
             if index < 0 or index >= len(rows):
                 print("Index out of range")
                 return
-            
+
             row = rows[index]
             book_id = row[0]
 
             conn.execute("DELETE FROM books WHERE id = ?", (book_id,))
-
 
     def _row_to_book(self, row: tuple) -> Book:
         row_title = row[0]
@@ -80,7 +75,7 @@ class SqlLibraryStorage(LibraryStorage):
         row_description = row[4]
         row_categories = row[5]
         row_date_published = row[6]
-        row_isbn = row [7]
+        row_isbn = row[7]
 
         return Book(
             title=row_title,
@@ -92,7 +87,6 @@ class SqlLibraryStorage(LibraryStorage):
             date_published=row_date_published,
             isbn=row_isbn,
         )
-    
 
     def _fetch_row_by_book(self, book: Book) -> tuple:
         with get_connection() as conn:
@@ -102,12 +96,11 @@ class SqlLibraryStorage(LibraryStorage):
                 page_count, date_published, google_id, isbn, created_at FROM books
                 WHERE google_id = ?
                 """,
-                (book.book_id,)
+                (book.book_id,),
             )
             row = cursor.fetchone()
 
             return row
-
 
     def get_book_details(self, book: Book) -> dict:
         row = self._fetch_row_by_book(book)
@@ -125,7 +118,6 @@ class SqlLibraryStorage(LibraryStorage):
             "created_at": row[9],
         }
 
-    
     def get_with_metadata(self, book: Book) -> BookWithMetadata:
         row = self._fetch_row_by_book(book)
 

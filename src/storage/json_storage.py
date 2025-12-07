@@ -2,10 +2,10 @@ from .storage_base import LibraryStorage
 import json
 from models import Book
 
+
 class JsonLibraryStorage(LibraryStorage):
     def __init__(self, path: str):
         self.path = path
-
 
     def load_all(self) -> list[Book]:
         try:
@@ -14,12 +14,11 @@ class JsonLibraryStorage(LibraryStorage):
 
             if not isinstance(raw, list):
                 raise ValueError("The library file must contain a list")
-            
+
             return [Book.from_dict(item) for item in raw]
 
         except (FileNotFoundError, ValueError, json.JSONDecodeError):
             return []
-        
 
     def add(self, book: Book) -> None:
         book_list = self.load_all()
@@ -27,18 +26,16 @@ class JsonLibraryStorage(LibraryStorage):
         book_list.append(book)
         self._save(book_list)
 
-
     def remove(self, index: int) -> None:
         books_list = self.load_all()
 
         if index < 0 or index >= len(books_list):
             print("Index out of range.")
             return
-        
+
         books_list.pop(index)
 
         self._save(books_list)
-    
 
     def _save(self, book_list: list[Book]) -> None:
         with open(self.path, "w", encoding="utf-8") as f:
@@ -48,8 +45,6 @@ class JsonLibraryStorage(LibraryStorage):
                 indent=4,
                 ensure_ascii=False,
             )
-    
 
     def get_book_details(self, book: Book) -> str:
         return book.detailed_text()
-        
