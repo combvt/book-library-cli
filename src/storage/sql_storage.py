@@ -122,3 +122,31 @@ class SqlLibraryStorage(LibraryStorage):
         row = self._fetch_row_by_book(book)
 
         return BookWithMetadata.from_row(row, book)
+    
+    def get_by_sql_index(self, sql_index: int) -> BookWithMetadata | None:
+        with get_connection() as conn:
+            cursor = conn.execute(
+                """
+                SELECT id, title, author, description, categories,
+                page_count, date_published, google_id, isbn, created_at FROM books
+                WHERE id = ?
+                """,
+                (sql_index,)
+            )
+            row = cursor.fetchone()
+
+            if row:
+                book = Book(
+                    title=row[1],
+                    book_id=row[7],
+                    author=row[2],
+                    page_count=row[5],
+                    description=row[3],
+                    categories=row[4],
+                    date_published=row[6],
+                    isbn=row[8],
+                )
+
+                return BookWithMetadata.from_row(row, book)
+            
+            return None
