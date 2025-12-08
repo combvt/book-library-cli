@@ -16,18 +16,24 @@ def sql_library():
 
 
 @app.get("/books", response_model=list[BookOut], status_code=status.HTTP_200_OK)
-def read_books(library: Library = Depends(sql_library)):
-    bookout_list = []
-
+def read_books(q: str | None = None, library: Library = Depends(sql_library)):
     if isinstance(library.storage, SqlLibraryStorage):
-        for item in library.books:
-            full_item = library.storage.get_with_metadata(item)
+        if q is None:
+            bookout_list = []   
+            for item in library.books:
+                full_item = library.storage.get_with_metadata(item)
+                bookout_item = BookOut.from_metadata(full_item)
+                
+                bookout_list.append(bookout_item)
 
-            bookout_item = BookOut.from_metadata(full_item)
-               
-            bookout_list.append(bookout_item)
+            return bookout_list
+        elif q:
+            meta_books = library.storage.search(q=q)
+            
+            return [BookOut.from_metadata(item) for item in meta_books]
 
-    return bookout_list
+            
+
 
 
 @app.get("/books/{sql_index}", response_model=BookOut)

@@ -150,3 +150,41 @@ class SqlLibraryStorage(LibraryStorage):
                 return BookWithMetadata.from_row(row, book)
             
             return None
+
+    def search(self, q: str) -> list[BookWithMetadata]:
+        with get_connection() as conn:
+            like_q = f"%{q}%"
+            cursor = conn.execute(
+                """
+                    SELECT id, title, author, description, categories,
+                    page_count, date_published, google_id, isbn, created_at FROM books
+                    WHERE title LIKE ?
+                    OR author LIKE ?
+                    OR description LIKE ?
+                """,
+                (like_q, like_q, like_q)
+            )
+            rows = cursor.fetchall()
+
+            if rows:
+                book_list: list[BookWithMetadata] = []
+                for row in rows:
+                    book = Book(
+                        title=row[1],
+                        book_id=row[7],
+                        author=row[2],
+                        page_count=row[5],
+                        description=row[3],
+                        categories=row[4],
+                        date_published=row[6],
+                        isbn=row[8],
+                    )
+
+                    meta_book = BookWithMetadata.from_row(row, book)
+
+                    book_list.append(meta_book)
+                
+                return book_list
+            
+            return []
+
