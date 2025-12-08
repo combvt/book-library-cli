@@ -1,12 +1,11 @@
-from dotenv import load_dotenv
 from library import Library
-from api_client import GoogleBooksClient
+from google_api_client import GoogleBooksClient
 from models import Book
 import utils
+from config import API_KEY
 
-load_dotenv()
 
-if not utils.API_KEY:
+if not API_KEY:
     raise ValueError("Missing API KEY. Make sure to create your .env file.")
 
 
@@ -174,7 +173,7 @@ def view_library_inner_flow(library: Library) -> str | None:
 
 def main():
     library = utils.choose_storage()
-    client = GoogleBooksClient(utils.API_KEY)
+    client = GoogleBooksClient(API_KEY)
 
     while True:
         choice = utils.get_string_from_user(
