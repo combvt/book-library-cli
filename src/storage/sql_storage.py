@@ -123,6 +123,18 @@ class SqlLibraryStorage(LibraryStorage):
 
         return BookWithMetadata.from_row(row, book)
     
+    def build_book_from_row(self, row: tuple) -> Book:
+        return Book(
+            title=row[1],
+            book_id=row[7],
+            author=row[2],
+            page_count=row[5],
+            description=row[3],
+            categories=row[4],
+            date_published=row[6],
+            isbn=row[8],
+        )
+
     def get_by_sql_index(self, sql_index: int) -> BookWithMetadata | None:
         with get_connection() as conn:
             cursor = conn.execute(
@@ -136,21 +148,12 @@ class SqlLibraryStorage(LibraryStorage):
             row = cursor.fetchone()
 
             if row:
-                book = Book(
-                    title=row[1],
-                    book_id=row[7],
-                    author=row[2],
-                    page_count=row[5],
-                    description=row[3],
-                    categories=row[4],
-                    date_published=row[6],
-                    isbn=row[8],
-                )
+                book = self.build_book_from_row(row)
 
                 return BookWithMetadata.from_row(row, book)
             
             return None
-#TODO maybe add row_to_book helper to reduce repetitive code
+
     def search(self, q: str) -> list[BookWithMetadata]:
         with get_connection() as conn:
             like_q = f"%{q}%"
@@ -169,16 +172,7 @@ class SqlLibraryStorage(LibraryStorage):
             if rows:
                 book_list: list[BookWithMetadata] = []
                 for row in rows:
-                    book = Book(
-                        title=row[1],
-                        book_id=row[7],
-                        author=row[2],
-                        page_count=row[5],
-                        description=row[3],
-                        categories=row[4],
-                        date_published=row[6],
-                        isbn=row[8],
-                    )
+                    book = self.build_book_from_row(row)
 
                     meta_book = BookWithMetadata.from_row(row, book)
 
