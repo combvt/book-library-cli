@@ -150,7 +150,7 @@ class SqlLibraryStorage(LibraryStorage):
                 return BookWithMetadata.from_row(row, book)
             
             return None
-
+#TODO maybe add row_to_book helper to reduce repetitive code
     def search(self, q: str) -> list[BookWithMetadata]:
         with get_connection() as conn:
             like_q = f"%{q}%"

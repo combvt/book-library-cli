@@ -14,11 +14,10 @@ library = Library(library_storage)
 def sql_library():
     return library
 
-
 @app.get("/books", response_model=list[BookOut], status_code=status.HTTP_200_OK)
 def read_books(q: str | None = None, library: Library = Depends(sql_library)):
     if isinstance(library.storage, SqlLibraryStorage):
-        if q is None:
+        if q is None or q == "":
             bookout_list = []   
             for item in library.books:
                 full_item = library.storage.get_with_metadata(item)
