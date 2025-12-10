@@ -1,10 +1,9 @@
-from fastapi import FastAPI, Depends, status, HTTPException
+from fastapi import FastAPI, Depends, status, HTTPException, Query
 from library import Library
 from storage.sql_storage import SqlLibraryStorage
-from config import DB_PATH
-from schemas import BookOut
-from pydantic import BaseModel
-
+from config import DB_PATH, API_KEY
+from schemas import BookOut, BookSearchResult
+from google_api_client import GoogleBooksClient
 
 app = FastAPI()
 
@@ -13,6 +12,11 @@ library = Library(library_storage)
 
 def sql_library():
     return library
+
+
+def google_client():
+    return GoogleBooksClient(API_KEY)
+
 
 @app.get("/books", response_model=list[BookOut], status_code=status.HTTP_200_OK)
 def read_books(q: str | None = None, library: Library = Depends(sql_library)):
@@ -31,9 +35,6 @@ def read_books(q: str | None = None, library: Library = Depends(sql_library)):
             
             return [BookOut.from_metadata(item) for item in meta_books]
 
-            
-
-
 
 @app.get("/books/{sql_index}", response_model=BookOut)
 def get_book(sql_index: int, library: Library = Depends(sql_library)):
@@ -46,4 +47,23 @@ def get_book(sql_index: int, library: Library = Depends(sql_library)):
         return BookOut.from_metadata(fetched_book)
             
    
-       
+@app.get("/search/google", response_model=list[BookSearchResult])
+def show_results(q: str = Query(min_length=1), client: GoogleBooksClient = Depends(google_client)):
+        book_list = client.search_books(q)
+
+        if not book_list:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No books found")
+        
+        return [BookSearchResult(
+                title=book.title,
+                authors=book.author,
+                date_published=book.date_published,
+                book_id=book.book_id
+            )
+                for book in book_list
+        ]
+    
+    
+        
+
+
