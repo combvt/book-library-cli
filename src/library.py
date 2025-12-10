@@ -1,5 +1,6 @@
-from models import Book
+from models import Book, BookWithMetadata
 from storage.storage_base import LibraryStorage
+from exceptions import BookNotFoundError
 
 
 class Library:

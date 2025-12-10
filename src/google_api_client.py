@@ -1,5 +1,6 @@
 from models import Book
 import requests
+from exceptions import BookNotFoundError
 
 BOOK_URL = "https://www.googleapis.com/books/v1/volumes"
 MAX_RESULTS = 10
@@ -28,12 +29,13 @@ class GoogleBooksClient:
         return [Book.from_api(item) for item in items]
     
     def get_book_by_id(self, book_id: str) -> Book:
-
-        response = requests.get(url=f"{BOOK_URL}/{book_id}", headers=self.headers,)
-        response.raise_for_status()
+        try:
+            response = requests.get(url=f"{BOOK_URL}/{book_id}", headers=self.headers)
+            response.raise_for_status()
+        except requests.exceptions.HTTPError:
+            raise BookNotFoundError
 
         book_data = response.json()
         
         return Book.from_api(book_data)
-        
         

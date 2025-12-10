@@ -1,6 +1,7 @@
 from .storage_base import LibraryStorage
 from db import get_connection, init_db
 from models import Book, BookWithMetadata
+from exceptions import BookNotFoundError
 
 
 class SqlLibraryStorage(LibraryStorage):

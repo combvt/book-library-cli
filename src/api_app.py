@@ -1,9 +1,10 @@
-from fastapi import FastAPI, Depends, status, HTTPException, Query
+from fastapi import FastAPI, Depends, status, HTTPException, Query, Path
 from library import Library
 from storage.sql_storage import SqlLibraryStorage
 from config import DB_PATH, API_KEY
 from schemas import BookOut, BookSearchResult
 from google_api_client import GoogleBooksClient
+from exceptions import BookNotFoundError
 
 app = FastAPI()
 
@@ -48,7 +49,7 @@ def get_book(sql_index: int, library: Library = Depends(sql_library)):
             
    
 @app.get("/search/google", response_model=list[BookSearchResult])
-def show_results(q: str = Query(min_length=1), results: int = Query(default=10, le=40, ge=1), client: GoogleBooksClient = Depends(google_client)):
+def show_results(q: str = Query(min_length=1), results: int = Query(default=10, le=20, ge=1), client: GoogleBooksClient = Depends(google_client)):
         book_list = client.search_books(q, results)
 
         if not book_list:
@@ -63,6 +64,24 @@ def show_results(q: str = Query(min_length=1), results: int = Query(default=10, 
             )
                 for book in book_list
         ]
+
+
+@app.post("/books/from-google/{book_id}", response_model=BookOut, status_code=status.HTTP_201_CREATED)
+def post_book(book_id: str, library: Library = Depends(sql_library), client: GoogleBooksClient = Depends(google_client)):
+    try:
+        book = client.get_book_by_id(book_id)
+    except BookNotFoundError:
+        raise HTTPException(status_code=404, detail="Book not found.")
+    
+    library.add(book)
+
+    if isinstance(library.storage, SqlLibraryStorage):
+        meta_book = library.storage.get_with_metadata(book)
+
+        return BookOut.from_metadata(meta_book)
+
+        
+
     
     
         
