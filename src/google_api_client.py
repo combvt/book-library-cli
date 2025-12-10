@@ -10,11 +10,11 @@ class GoogleBooksClient:
         self.api_key = api_key
         self.headers = {"key": self.api_key}
 
-    def search_books(self, book_title: str) -> list[Book]:
+    def search_books(self, book_title: str, results: int = MAX_RESULTS) -> list[Book]:
         book_params = {
             "q": book_title,
             "filter": "partial",
-            "maxResults": MAX_RESULTS,
+            "maxResults": results,
             "printType": "books",
             "projection": "full",
         }

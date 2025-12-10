@@ -48,8 +48,8 @@ def get_book(sql_index: int, library: Library = Depends(sql_library)):
             
    
 @app.get("/search/google", response_model=list[BookSearchResult])
-def show_results(q: str = Query(min_length=1), client: GoogleBooksClient = Depends(google_client)):
-        book_list = client.search_books(q)
+def show_results(q: str = Query(min_length=1), results: int = Query(default=10, le=40, ge=1), client: GoogleBooksClient = Depends(google_client)):
+        book_list = client.search_books(q, results)
 
         if not book_list:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No books found")
