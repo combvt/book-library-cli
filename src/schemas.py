@@ -27,3 +27,10 @@ class BookOut(BaseModel):
             isbn = book.raw_book.isbn,
             created_at = book.created_at,
         )
+    
+
+class BookSearchResult(BaseModel):
+    title: str
+    authors: str | None
+    date_published: str | None
+    book_id: str
