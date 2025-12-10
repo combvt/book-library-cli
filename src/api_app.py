@@ -58,7 +58,8 @@ def show_results(q: str = Query(min_length=1), results: int = Query(default=10, 
                 title=book.title,
                 authors=book.author,
                 date_published=book.date_published,
-                book_id=book.book_id
+                book_id=book.book_id,
+                isbn=book.isbn
             )
                 for book in book_list
         ]

@@ -26,3 +26,14 @@ class GoogleBooksClient:
         items = book_data.get("items", [])
 
         return [Book.from_api(item) for item in items]
+    
+    def get_book_by_id(self, book_id: str) -> Book:
+
+        response = requests.get(url=f"{BOOK_URL}/{book_id}", headers=self.headers,)
+        response.raise_for_status()
+
+        book_data = response.json()
+        
+        return Book.from_api(book_data)
+        
+        

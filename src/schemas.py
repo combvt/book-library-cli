@@ -34,3 +34,4 @@ class BookSearchResult(BaseModel):
     authors: str | None
     date_published: str | None
     book_id: str
+    isbn: str | None
