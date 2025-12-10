@@ -12,19 +12,16 @@ class Library:
         self.storage.add(item)
         self.books = self.storage.load_all()
 
-        print(f"Added {item.title}, by {item.author} to your library.\n")
 
-    def remove(self, index: int) -> None:
+    def remove(self, index: int) -> Book | None:
         try:
-            removed_book = self.books[index]
+            removed_book = self.storage.remove(index)
+            self.books = self.storage.load_all()
         except IndexError:
-            print("Index out of range.")
-            return
+            raise BookNotFoundError("Index out of range.")
 
-        self.storage.remove(index)
-        self.books = self.storage.load_all()
-
-        print(f"Removed {removed_book.title}, by {removed_book.author}.")
+        if removed_book:
+            return removed_book
 
     def is_empty(self) -> bool:
         return len(self.books) == 0

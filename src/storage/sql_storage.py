@@ -50,23 +50,27 @@ class SqlLibraryStorage(LibraryStorage):
                 ),
             )
 
-    def remove(self, index: int) -> None:
+    def remove(self, index: int) -> Book | None:
         with get_connection() as conn:
             cursor = conn.execute(
                 """
-                    SELECT id FROM books ORDER BY id ASC
-                    """
+                    SELECT id, title, author, description, categories,
+                    page_count, date_published, google_id, isbn, created_at FROM books
+                """
             )
             rows = cursor.fetchall()
 
             if index < 0 or index >= len(rows):
-                print("Index out of range")
-                return
+                raise IndexError
 
             row = rows[index]
             book_id = row[0]
 
+            removed_book = self.build_book_from_row(row)
+
             conn.execute("DELETE FROM books WHERE id = ?", (book_id,))
+
+            return removed_book
 
     def _row_to_book(self, row: tuple) -> Book:
         row_title = row[0]

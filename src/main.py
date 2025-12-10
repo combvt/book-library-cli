@@ -24,6 +24,8 @@ def inner_flow(
 
             if add_or_view == "add":
                 library.add(chosen_book)
+                print(f"Added {chosen_book.title}, by {chosen_book.author} to your library.\n")
+
                 return None
             elif add_or_view == "detailed":
                 print()
@@ -37,6 +39,7 @@ def inner_flow(
 
                     if answer == "add":
                         library.add(chosen_book)
+                        print(f"Added {chosen_book.title}, by {chosen_book.author} to your library.\n")
 
                         return None
                     elif answer == "back":
@@ -108,7 +111,15 @@ def manage_library(library: Library) -> str | None:
                 print()
 
                 if book_index:
-                    library.remove(book_index - 1)
+                    try:
+                        removed_book = library.remove(book_index - 1)
+                        
+                        if removed_book:
+                            print(f"Removed {removed_book.title}, by {removed_book.author}.")
+             
+                    except BookNotFoundError:
+                        print("Index out of range.")
+
                     print()
 
                     continue_removing = utils.get_string_from_user(
