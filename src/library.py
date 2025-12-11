@@ -28,3 +28,6 @@ class Library:
     
     def check_book_exists(self, google_id: str):
         return self.storage.exists_by_google_id(google_id)
+    
+    def remove_by_sql_index(self, sql_index: int):
+        return self.storage.remove_by_sql_index(sql_index)

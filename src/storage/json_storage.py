@@ -56,4 +56,7 @@ class JsonLibraryStorage(LibraryStorage):
                 raw = json.load(f)
 
         return any(item.get("book_id") == google_id for item in raw)
+    
+    def remove_by_sql_index(self, sql_index: int) -> bool:
+        raise NotImplementedError
       

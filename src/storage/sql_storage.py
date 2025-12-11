@@ -173,6 +173,19 @@ class SqlLibraryStorage(LibraryStorage):
             
             return None
 
+    def remove_by_sql_index(self, sql_index: int) -> bool:
+        with get_connection() as conn:
+            cursor = conn.execute(
+                """
+                DELETE from books
+                WHERE id = ?
+                """,
+                (sql_index,)
+            )
+            
+            return cursor.rowcount > 0
+
+
     def search(self, q: str) -> list[BookWithMetadata]:
         with get_connection() as conn:
             like_q = f"%{q}%"
