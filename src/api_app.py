@@ -46,7 +46,17 @@ def get_book(sql_index: int, library: Library = Depends(sql_library)):
         
         return BookOut.from_metadata(fetched_book)
             
-   
+
+@app.delete("/books/{sql_index}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_book(sql_index: int, library: Library = Depends(sql_library)):
+    
+        if not library.remove_by_sql_index(sql_index):
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Book not found.")   
+    
+        
+
+
+
 @app.get("/search/google", response_model=list[BookSearchResult])
 def show_results(q: str = Query(min_length=1), results: int = Query(default=10, le=20, ge=1), client: GoogleBooksClient = Depends(google_client)):
         book_list = client.search_books(q, results)
@@ -82,7 +92,8 @@ def post_book(book_id: str, library: Library = Depends(sql_library), client: Goo
 
         return BookOut.from_metadata(meta_book)
 
-        
+
+     
 
     
     
