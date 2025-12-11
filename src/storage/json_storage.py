@@ -50,3 +50,10 @@ class JsonLibraryStorage(LibraryStorage):
 
     def get_book_details(self, book: Book) -> str:
         return book.detailed_text()
+    
+    def exists_by_google_id(self, google_id: str) -> bool:
+        with open(self.path, "r", encoding="utf-8") as f:
+                raw = json.load(f)
+
+        return any(item.get("book_id") == google_id for item in raw)
+      
