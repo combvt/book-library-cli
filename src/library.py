@@ -25,3 +25,6 @@ class Library:
 
     def is_empty(self) -> bool:
         return len(self.books) == 0
+    
+    def check_book_exists(self, google_id: str):
+        return self.storage.exists_by_google_id(google_id)

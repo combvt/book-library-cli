@@ -72,6 +72,9 @@ def post_book(book_id: str, library: Library = Depends(sql_library), client: Goo
     except BookNotFoundError:
         raise HTTPException(status_code=404, detail="Book not found.")
     
+    if library.check_book_exists(book.book_id):
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Book already in library.")
+    
     library.add(book)
 
     if isinstance(library.storage, SqlLibraryStorage):
