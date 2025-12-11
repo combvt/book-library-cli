@@ -31,7 +31,6 @@ class JsonLibraryStorage(LibraryStorage):
 
         if index < 0 or index >= len(books_list):
             raise IndexError
-            
 
         removed_book = books_list.pop(index)
 
@@ -50,13 +49,12 @@ class JsonLibraryStorage(LibraryStorage):
 
     def get_book_details(self, book: Book) -> str:
         return book.detailed_text()
-    
+
     def exists_by_google_id(self, google_id: str) -> bool:
         with open(self.path, "r", encoding="utf-8") as f:
-                raw = json.load(f)
+            raw = json.load(f)
 
         return any(item.get("book_id") == google_id for item in raw)
-    
+
     def remove_by_sql_index(self, sql_index: int) -> bool:
         raise NotImplementedError
-      

@@ -7,7 +7,6 @@ import msvcrt
 from config import LIBRARY_PATH
 
 
-
 def get_int_from_user(prompt: str) -> int | None:
     user_input = input(prompt).strip()
 

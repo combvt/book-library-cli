@@ -127,7 +127,7 @@ class SqlLibraryStorage(LibraryStorage):
         row = self._fetch_row_by_book(book)
 
         return BookWithMetadata.from_row(row, book)
-    
+
     def build_book_from_row(self, row: tuple) -> Book:
         return Book(
             title=row[1],
@@ -147,7 +147,7 @@ class SqlLibraryStorage(LibraryStorage):
                 SELECT id FROM books
                 where google_id = ?
                 """,
-                (google_id,)
+                (google_id,),
             )
 
             row = cursor.fetchone()
@@ -162,7 +162,7 @@ class SqlLibraryStorage(LibraryStorage):
                 page_count, date_published, google_id, isbn, created_at FROM books
                 WHERE id = ?
                 """,
-                (sql_index,)
+                (sql_index,),
             )
             row = cursor.fetchone()
 
@@ -170,7 +170,7 @@ class SqlLibraryStorage(LibraryStorage):
                 book = self.build_book_from_row(row)
 
                 return BookWithMetadata.from_row(row, book)
-            
+
             return None
 
     def remove_by_sql_index(self, sql_index: int) -> bool:
@@ -180,11 +180,10 @@ class SqlLibraryStorage(LibraryStorage):
                 DELETE from books
                 WHERE id = ?
                 """,
-                (sql_index,)
+                (sql_index,),
             )
-            
-            return cursor.rowcount > 0
 
+            return cursor.rowcount > 0
 
     def search(self, q: str) -> list[BookWithMetadata]:
         with get_connection() as conn:
@@ -197,7 +196,7 @@ class SqlLibraryStorage(LibraryStorage):
                     OR author LIKE ?
                     OR description LIKE ?
                 """,
-                (like_q, like_q, like_q)
+                (like_q, like_q, like_q),
             )
             rows = cursor.fetchall()
 
@@ -209,9 +208,9 @@ class SqlLibraryStorage(LibraryStorage):
                     meta_book = BookWithMetadata.from_row(row, book)
 
                     book_list.append(meta_book)
-                
+
                 return book_list
-            
+
             return []
 
     def get_random_book(self) -> BookWithMetadata | None:
@@ -219,8 +218,9 @@ class SqlLibraryStorage(LibraryStorage):
             cursor = conn.execute(
                 """
                 SELECT id FROM books
-                """)
-            
+                """
+            )
+
             rows = cursor.fetchall()
             id_list = [x[0] for x in rows]
 

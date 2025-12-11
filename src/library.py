@@ -12,7 +12,6 @@ class Library:
         self.storage.add(item)
         self.books = self.storage.load_all()
 
-
     def remove(self, index: int) -> Book | None:
         try:
             removed_book = self.storage.remove(index)
@@ -25,9 +24,9 @@ class Library:
 
     def is_empty(self) -> bool:
         return len(self.books) == 0
-    
+
     def check_book_exists(self, google_id: str):
         return self.storage.exists_by_google_id(google_id)
-    
+
     def remove_by_sql_index(self, sql_index: int):
         return self.storage.remove_by_sql_index(sql_index)
