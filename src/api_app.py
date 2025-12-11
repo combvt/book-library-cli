@@ -8,11 +8,10 @@ from exceptions import BookNotFoundError
 
 app = FastAPI()
 
-library_storage = SqlLibraryStorage(DB_PATH)
-library = Library(library_storage)
+
 
 def sql_library():
-    return library
+    return Library(SqlLibraryStorage(DB_PATH))
 
 
 def google_client():

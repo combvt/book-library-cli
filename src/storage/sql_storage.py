@@ -140,6 +140,20 @@ class SqlLibraryStorage(LibraryStorage):
             isbn=row[8],
         )
 
+    def exists_by_google_id(self, google_id: str) -> bool:
+        with get_connection() as conn:
+            cursor = conn.execute(
+                """
+                SELECT id FROM books
+                where google_id = ?
+                """,
+                (google_id,)
+            )
+
+            row = cursor.fetchone()
+
+        return row is not None
+
     def get_by_sql_index(self, sql_index: int) -> BookWithMetadata | None:
         with get_connection() as conn:
             cursor = conn.execute(
