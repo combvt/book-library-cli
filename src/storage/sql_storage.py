@@ -1,7 +1,7 @@
 from .storage_base import LibraryStorage
 from db import get_connection, init_db
 from models import Book, BookWithMetadata
-from exceptions import BookNotFoundError
+import random
 
 
 class SqlLibraryStorage(LibraryStorage):
@@ -214,3 +214,16 @@ class SqlLibraryStorage(LibraryStorage):
             
             return []
 
+    def get_random_book(self) -> BookWithMetadata | None:
+        with get_connection() as conn:
+            cursor = conn.execute(
+                """
+                SELECT id FROM books
+                """)
+            
+            rows = cursor.fetchall()
+            id_list = [x[0] for x in rows]
+
+            fetched_id = random.choice(id_list)
+
+            return self.get_by_sql_index(fetched_id)
