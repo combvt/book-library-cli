@@ -40,6 +40,18 @@ def read_books(q: str | None = None, library: Library = Depends(sql_library)):
             return [BookOut.from_metadata(item) for item in meta_books]
 
 
+@app.get("/books/random", response_model=BookOut, status_code=status.HTTP_200_OK)
+def get_random(library: Library = Depends(sql_library)):
+    if library.is_empty():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Library is empty.")
+    
+    if isinstance(library.storage, SqlLibraryStorage):
+        chosen_book = library.storage.get_random_book()
+
+        if chosen_book:
+            return BookOut.from_metadata(chosen_book)
+
+
 @app.get("/books/{sql_index}", response_model=BookOut)
 def get_book(sql_index: int, library: Library = Depends(sql_library)):
     if isinstance(library.storage, SqlLibraryStorage):
