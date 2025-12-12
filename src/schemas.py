@@ -36,3 +36,13 @@ class BookSearchResult(BaseModel):
     date_published: str | None
     book_id: str
     isbn: str | None
+
+
+class BookUpdate(BaseModel):
+    title: str | None
+    author: str | None
+    description: str | None
+    categories: str | None
+    page_count: int | None
+    date_published: str | None
+    isbn: str | None
