@@ -46,3 +46,25 @@ class BookUpdate(BaseModel):
     page_count: int | None = None
     date_published: str | None = None
     isbn: str | None = None
+
+
+class PageCountStats(BaseModel):
+    min_pages: int 
+    max_pages: int 
+    avg_pages: float 
+
+
+class BookAddedInfo(BaseModel):
+    sql_index: int 
+    title: str 
+    created_at: str 
+
+
+class BookStatsOut(BaseModel):
+    total_books: int
+    unique_authors: int
+    page_count: PageCountStats | None = None
+    earliest_added: BookAddedInfo | None = None
+    latest_added: BookAddedInfo | None = None
+
+
