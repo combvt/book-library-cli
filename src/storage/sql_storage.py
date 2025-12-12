@@ -222,18 +222,31 @@ class SqlLibraryStorage(LibraryStorage):
             )
 
             rows = cursor.fetchall()
+
+            if not rows:
+                return None
+
             id_list = [x[0] for x in rows]
 
             fetched_id = random.choice(id_list)
 
             return self.get_by_sql_index(fetched_id)
 
-    def update_book(self, sql_index: int, updates: dict | None) -> BookWithMetadata | None:
+    def update_book(
+        self, sql_index: int, updates: dict | None
+    ) -> BookWithMetadata | None:
         if not updates:
             return None
-        
-        ALLOWED = ["title", "authors", "description", "categories", "page_count", 
-        "date_published", "isbn"]
+
+        ALLOWED = [
+            "title",
+            "author",
+            "description",
+            "categories",
+            "page_count",
+            "date_published",
+            "isbn",
+        ]
         columns = []
         values = []
 
@@ -256,7 +269,7 @@ class SqlLibraryStorage(LibraryStorage):
                 SET {", ".join(columns)}
                 WHERE id = ?
                 """,
-                values
+                values,
             )
 
             conn.commit()

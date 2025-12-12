@@ -32,17 +32,17 @@ class BookOut(BaseModel):
 
 class BookSearchResult(BaseModel):
     title: str
-    authors: str | None
+    author: str | None
     date_published: str | None
     book_id: str
     isbn: str | None
 
 
 class BookUpdate(BaseModel):
-    title: str | None
-    authors: str | None
-    description: str | None
-    categories: str | None
-    page_count: int | None
-    date_published: str | None
-    isbn: str | None
+    title: str | None = None
+    author: str | None = None
+    description: str | None = None
+    categories: str | None = None
+    page_count: int | None = None
+    date_published: str | None = None
+    isbn: str | None = None

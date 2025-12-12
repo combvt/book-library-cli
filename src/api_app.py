@@ -89,7 +89,7 @@ def show_results(
     return [
         BookSearchResult(
             title=book.title,
-            authors=book.author,
+            author=book.author,
             date_published=book.date_published,
             book_id=book.book_id,
             isbn=book.isbn,
@@ -124,3 +124,21 @@ def post_book(
         meta_book = library.storage.get_with_metadata(book)
 
         return BookOut.from_metadata(meta_book)
+
+
+@app.put("/books/{sql_index}", response_model=BookOut, status_code=status.HTTP_200_OK)
+def update_book(
+    sql_index: int, updated_book: BookUpdate, library: Library = Depends(sql_library)
+):
+    if isinstance(library.storage, SqlLibraryStorage):
+        updates = updated_book.model_dump(exclude_none=True, exclude_unset=True)
+
+        if not updates:
+            raise HTTPException(status_code=400, detail="No fields provided to update.")
+
+        new_book = library.storage.update_book(sql_index, updates)
+
+        if not new_book:
+            raise HTTPException(status_code=404, detail="Book not found.")
+
+        return BookOut.from_metadata(new_book)
