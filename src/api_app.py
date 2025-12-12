@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends, status, HTTPException, Query, Path
 from library import Library
 from storage.sql_storage import SqlLibraryStorage
 from config import DB_PATH, API_KEY
-from schemas import BookOut, BookSearchResult
+from schemas import BookOut, BookSearchResult, BookUpdate
 from google_api_client import GoogleBooksClient
 from exceptions import BookNotFoundError
 

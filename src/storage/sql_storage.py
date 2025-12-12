@@ -227,3 +227,40 @@ class SqlLibraryStorage(LibraryStorage):
             fetched_id = random.choice(id_list)
 
             return self.get_by_sql_index(fetched_id)
+
+    def update_book(self, sql_index: int, updates: dict | None) -> BookWithMetadata | None:
+        if not updates:
+            return None
+        
+        ALLOWED = ["title", "authors", "description", "categories", "page_count", 
+        "date_published", "isbn"]
+        columns = []
+        values = []
+
+        for key, value in updates.items():
+            if key not in ALLOWED:
+                continue
+
+            columns.append(f"{key} = ?")
+            values.append(value)
+
+        if not columns:
+            return None
+
+        values.append(sql_index)
+
+        with get_connection() as conn:
+            cursor = conn.execute(
+                f"""
+                UPDATE books
+                SET {", ".join(columns)}
+                WHERE id = ?
+                """,
+                values
+            )
+
+            conn.commit()
+            if cursor.rowcount == 0:
+                return None
+
+        return self.get_by_sql_index(sql_index)

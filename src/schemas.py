@@ -40,7 +40,7 @@ class BookSearchResult(BaseModel):
 
 class BookUpdate(BaseModel):
     title: str | None
-    author: str | None
+    authors: str | None
     description: str | None
     categories: str | None
     page_count: int | None
