@@ -3,7 +3,8 @@ from db import get_connection, init_db
 from models import Book, BookWithMetadata
 import random
 
-
+#TODO change cases when fetch all details about book and replace
+#with * instead of SELECt .....
 class SqlLibraryStorage(LibraryStorage):
     def __init__(self, db_path="books.db"):
         self.path = db_path
@@ -277,3 +278,88 @@ class SqlLibraryStorage(LibraryStorage):
                 return None
 
         return self.get_by_sql_index(sql_index)
+
+    def get_stats(self) -> dict | None:
+        stats_dict = {}
+
+        with get_connection() as conn:
+            cursor = conn.execute(
+                """
+                SELECT COUNT(*) FROM books
+                """
+            )
+            rows = cursor.fetchone()[0]
+
+            if rows == 0:
+                return None
+            
+            stats_dict["total_books"] = rows
+            exclude_author = "Unknown Author"
+
+            cursor = conn.execute( 
+                """
+                SELECT COUNT(DISTINCT author) FROM books
+                WHERE author != ?
+                """,
+                (exclude_author,)
+            )
+               
+            rows = cursor.fetchone()
+
+            stats_dict["unique_authors"] = rows[0]
+
+            cursor = conn.execute( 
+                """
+                SELECT 
+                min(page_count),
+                max(page_count),
+                avg(page_count)
+                FROM books
+                WHERE page_count IS NOT NULL
+                """
+            )
+
+            rows = cursor.fetchone()
+
+            pages_dict = {}
+            pages_dict["min_pages"] = rows[0]       
+            pages_dict["max_pages"] = rows[1]       
+            pages_dict["avg_pages"] = round(rows[2], 2)
+            stats_dict["page_count"] = pages_dict
+
+            cursor = conn.execute(
+                """            
+                    SELECT id, title, created_at
+                    FROM books
+                    ORDER BY created_at ASC, id ASC 
+                    LIMIT 1
+                """
+            )
+
+            rows = cursor.fetchone()
+
+            stats_dict["earliest_added"] = {
+                "sql_index": rows[0],
+                "title": rows[1],
+                "created_at": rows[2],
+            }
+
+            cursor = conn.execute(
+                """            
+                    SELECT id, title, created_at
+                    FROM books
+                    ORDER BY created_at DESC, id DESC
+                    LIMIT 1
+                """
+            )
+
+            rows = cursor.fetchone()
+
+            stats_dict["latest_added"] = {
+                "sql_index": rows[0],
+                "title": rows[1],
+                "created_at": rows[2],
+            } 
+          
+        return stats_dict        
+
