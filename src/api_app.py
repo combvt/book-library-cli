@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends, status, HTTPException, Query, Path
 from library import Library
 from storage.sql_storage import SqlLibraryStorage
 from config import DB_PATH, API_KEY
-from schemas import BookOut, BookSearchResult, BookUpdate
+from schemas import BookOut, BookSearchResult, BookUpdate, BookStatsOut
 from google_api_client import GoogleBooksClient
 from exceptions import BookNotFoundError
 
@@ -51,6 +51,14 @@ def get_random(library: Library = Depends(sql_library)):
 
         if chosen_book:
             return BookOut.from_metadata(chosen_book)
+
+
+@app.get("/books/stats", response_model=BookStatsOut, status_code=200)
+def get_stats(library: Library = Depends(sql_library)):
+    if isinstance(library.storage, SqlLibraryStorage):
+        book_stats = library.storage.get_stats()
+
+        return BookStatsOut(**book_stats)
 
 
 @app.get("/books/{sql_index}", response_model=BookOut)

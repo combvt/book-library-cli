@@ -49,9 +49,9 @@ class BookUpdate(BaseModel):
 
 
 class PageCountStats(BaseModel):
-    min_pages: int 
-    max_pages: int 
-    avg_pages: float 
+    min_pages: int | None
+    max_pages: int | None
+    avg_pages: float | None
 
 
 class BookAddedInfo(BaseModel):

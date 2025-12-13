@@ -3,8 +3,7 @@ from db import get_connection, init_db
 from models import Book, BookWithMetadata
 import random
 
-#TODO change cases when fetch all details about book and replace
-#with * instead of SELECt .....
+
 class SqlLibraryStorage(LibraryStorage):
     def __init__(self, db_path="books.db"):
         self.path = db_path
@@ -279,7 +278,7 @@ class SqlLibraryStorage(LibraryStorage):
 
         return self.get_by_sql_index(sql_index)
 
-    def get_stats(self) -> dict | None:
+    def get_stats(self) -> dict:
         stats_dict = {}
 
         with get_connection() as conn:
@@ -291,10 +290,16 @@ class SqlLibraryStorage(LibraryStorage):
             rows = cursor.fetchone()[0]
 
             if rows == 0:
-                return None
+                return {
+                    "total_books": 0,
+                    "unique_authors": 0,
+                    "page_count": None,
+                    "earliest_added": None,
+                    "latest_added": None,
+                }
             
             stats_dict["total_books"] = rows
-            exclude_author = "Unknown Author"
+            exclude_author = "Unknown author"
 
             cursor = conn.execute( 
                 """
@@ -324,7 +329,7 @@ class SqlLibraryStorage(LibraryStorage):
             pages_dict = {}
             pages_dict["min_pages"] = rows[0]       
             pages_dict["max_pages"] = rows[1]       
-            pages_dict["avg_pages"] = round(rows[2], 2)
+            pages_dict["avg_pages"] = round(rows[2], 2) if rows[2] is not None else None
             stats_dict["page_count"] = pages_dict
 
             cursor = conn.execute(
