@@ -1,12 +1,14 @@
-from dotenv import load_dotenv
 from library import Library
-from api_client import GoogleBooksClient
+from google_api_client import GoogleBooksClient
 from models import Book
 import utils
+from config import API_KEY
+from exceptions import BookNotFoundError
+from storage.sql_storage import SqlLibraryStorage
+from storage.json_storage import JsonLibraryStorage
 
-load_dotenv()
 
-if not utils.API_KEY:
+if not API_KEY:
     raise ValueError("Missing API KEY. Make sure to create your .env file.")
 
 
@@ -22,6 +24,10 @@ def inner_flow(
 
             if add_or_view == "add":
                 library.add(chosen_book)
+                print(
+                    f"Added {chosen_book.title}, by {chosen_book.author} to your library.\n"
+                )
+
                 return None
             elif add_or_view == "detailed":
                 print()
@@ -35,6 +41,9 @@ def inner_flow(
 
                     if answer == "add":
                         library.add(chosen_book)
+                        print(
+                            f"Added {chosen_book.title}, by {chosen_book.author} to your library.\n"
+                        )
 
                         return None
                     elif answer == "back":
@@ -106,7 +115,17 @@ def manage_library(library: Library) -> str | None:
                 print()
 
                 if book_index:
-                    library.remove(book_index - 1)
+                    try:
+                        removed_book = library.remove(book_index - 1)
+
+                        if removed_book:
+                            print(
+                                f"Removed {removed_book.title}, by {removed_book.author}."
+                            )
+
+                    except BookNotFoundError:
+                        print("Index out of range.")
+
                     print()
 
                     continue_removing = utils.get_string_from_user(
@@ -174,7 +193,7 @@ def view_library_inner_flow(library: Library) -> str | None:
 
 def main():
     library = utils.choose_storage()
-    client = GoogleBooksClient(utils.API_KEY)
+    client = GoogleBooksClient(API_KEY)
 
     while True:
         choice = utils.get_string_from_user(

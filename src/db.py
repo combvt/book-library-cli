@@ -1,11 +1,5 @@
 import sqlite3
-from dotenv import load_dotenv
-import os
-
-
-load_dotenv()
-
-DB_PATH = os.getenv("DB_PATH", "books.db")
+from config import DB_PATH
 
 
 def get_connection():

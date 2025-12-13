@@ -1,5 +1,6 @@
-from models import Book
+from models import Book, BookWithMetadata
 from storage.storage_base import LibraryStorage
+from exceptions import BookNotFoundError
 
 
 class Library:
@@ -11,19 +12,21 @@ class Library:
         self.storage.add(item)
         self.books = self.storage.load_all()
 
-        print(f"Added {item.title}, by {item.author} to your library.\n")
-
-    def remove(self, index: int) -> None:
+    def remove(self, index: int) -> Book | None:
         try:
-            removed_book = self.books[index]
+            removed_book = self.storage.remove(index)
+            self.books = self.storage.load_all()
         except IndexError:
-            print("Index out of range.")
-            return
+            raise BookNotFoundError("Index out of range.")
 
-        self.storage.remove(index)
-        self.books = self.storage.load_all()
-
-        print(f"Removed {removed_book.title}, by {removed_book.author}.")
+        if removed_book:
+            return removed_book
 
     def is_empty(self) -> bool:
         return len(self.books) == 0
+
+    def check_book_exists(self, google_id: str):
+        return self.storage.exists_by_google_id(google_id)
+
+    def remove_by_sql_index(self, sql_index: int):
+        return self.storage.remove_by_sql_index(sql_index)

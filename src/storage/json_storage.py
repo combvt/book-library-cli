@@ -26,16 +26,17 @@ class JsonLibraryStorage(LibraryStorage):
         book_list.append(book)
         self._save(book_list)
 
-    def remove(self, index: int) -> None:
+    def remove(self, index: int) -> Book | None:
         books_list = self.load_all()
 
         if index < 0 or index >= len(books_list):
-            print("Index out of range.")
-            return
+            raise IndexError
 
-        books_list.pop(index)
+        removed_book = books_list.pop(index)
 
         self._save(books_list)
+
+        return removed_book
 
     def _save(self, book_list: list[Book]) -> None:
         with open(self.path, "w", encoding="utf-8") as f:
@@ -48,3 +49,12 @@ class JsonLibraryStorage(LibraryStorage):
 
     def get_book_details(self, book: Book) -> str:
         return book.detailed_text()
+
+    def exists_by_google_id(self, google_id: str) -> bool:
+        with open(self.path, "r", encoding="utf-8") as f:
+            raw = json.load(f)
+
+        return any(item.get("book_id") == google_id for item in raw)
+
+    def remove_by_sql_index(self, sql_index: int) -> bool:
+        raise NotImplementedError

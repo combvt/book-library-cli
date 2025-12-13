@@ -1,13 +1,10 @@
-from models import Book, BookWithMetadata
+from models import Book
 from library import Library
 from storage.sql_storage import SqlLibraryStorage
 from storage.json_storage import JsonLibraryStorage
 from db import DB_PATH
-import os
 import msvcrt
-
-API_KEY = os.getenv("API_KEY")
-LIBRARY_PATH = os.getenv("LIBRARY_PATH", "book_library.json")
+from config import LIBRARY_PATH
 
 
 def get_int_from_user(prompt: str) -> int | None:
