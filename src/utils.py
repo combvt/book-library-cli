@@ -1,10 +1,10 @@
-from models import Book
-from library import Library
-from storage.sql_storage import SqlLibraryStorage
-from storage.json_storage import JsonLibraryStorage
-from db import DB_PATH
+from src.models import Book
+from src.library import Library
+from src.storage.sql_storage import SqlLibraryStorage
+from src.storage.json_storage import JsonLibraryStorage
+from src.db import DB_PATH
 import msvcrt
-from config import LIBRARY_PATH
+from src.config import LIBRARY_PATH
 
 
 def get_int_from_user(prompt: str) -> int | None:

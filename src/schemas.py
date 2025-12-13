@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from models import BookWithMetadata
+from src.models import BookWithMetadata
 
 
 class BookOut(BaseModel):

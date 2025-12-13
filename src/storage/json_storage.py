@@ -1,6 +1,6 @@
 from .storage_base import LibraryStorage
 import json
-from models import Book
+from src.models import Book
 
 
 class JsonLibraryStorage(LibraryStorage):
