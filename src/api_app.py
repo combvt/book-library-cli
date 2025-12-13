@@ -9,9 +9,6 @@ from exceptions import BookNotFoundError
 app = FastAPI()
 
 
-# TODO
-# GET /books/stats (, earliest added, latest added,
-# , page_count stats (min/max page count, avg pagecount)
 def sql_library():
     return Library(SqlLibraryStorage(DB_PATH))
 

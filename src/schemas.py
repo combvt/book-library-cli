@@ -55,9 +55,9 @@ class PageCountStats(BaseModel):
 
 
 class BookAddedInfo(BaseModel):
-    sql_index: int 
-    title: str 
-    created_at: str 
+    sql_index: int
+    title: str
+    created_at: str
 
 
 class BookStatsOut(BaseModel):
@@ -66,5 +66,3 @@ class BookStatsOut(BaseModel):
     page_count: PageCountStats | None = None
     earliest_added: BookAddedInfo | None = None
     latest_added: BookAddedInfo | None = None
-
-

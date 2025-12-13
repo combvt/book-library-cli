@@ -297,23 +297,23 @@ class SqlLibraryStorage(LibraryStorage):
                     "earliest_added": None,
                     "latest_added": None,
                 }
-            
+
             stats_dict["total_books"] = rows
             exclude_author = "Unknown author"
 
-            cursor = conn.execute( 
+            cursor = conn.execute(
                 """
                 SELECT COUNT(DISTINCT author) FROM books
                 WHERE author != ?
                 """,
-                (exclude_author,)
+                (exclude_author,),
             )
-               
+
             rows = cursor.fetchone()
 
             stats_dict["unique_authors"] = rows[0]
 
-            cursor = conn.execute( 
+            cursor = conn.execute(
                 """
                 SELECT 
                 min(page_count),
@@ -327,8 +327,8 @@ class SqlLibraryStorage(LibraryStorage):
             rows = cursor.fetchone()
 
             pages_dict = {}
-            pages_dict["min_pages"] = rows[0]       
-            pages_dict["max_pages"] = rows[1]       
+            pages_dict["min_pages"] = rows[0]
+            pages_dict["max_pages"] = rows[1]
             pages_dict["avg_pages"] = round(rows[2], 2) if rows[2] is not None else None
             stats_dict["page_count"] = pages_dict
 
@@ -364,7 +364,6 @@ class SqlLibraryStorage(LibraryStorage):
                 "sql_index": rows[0],
                 "title": rows[1],
                 "created_at": rows[2],
-            } 
-          
-        return stats_dict        
+            }
 
+        return stats_dict
