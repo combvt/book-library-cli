@@ -1,6 +1,6 @@
-from models import Book
+from src.models import Book
 import requests
-from exceptions import BookNotFoundError
+from src.exceptions import BookNotFoundError
 
 BOOK_URL = "https://www.googleapis.com/books/v1/volumes"
 MAX_RESULTS = 10
