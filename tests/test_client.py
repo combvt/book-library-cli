@@ -29,18 +29,20 @@ def test_search_one_book(monkeypatch):
 
         def json(self):
             return {
-                "items": [{
-                    "id": "testds21",
-                    "volumeInfo": {
-                        "title": "test123",
-                        "pageCount": 25,
+                "items": [
+                    {
+                        "id": "testds21",
+                        "volumeInfo": {
+                            "title": "test123",
+                            "pageCount": 25,
+                        },
                     }
-                }]
+                ]
             }
-    
+
     def mock_get(*args, **kwargs):
         return MockResponse()
-    
+
     monkeypatch.setattr("src.google_api_client.requests.get", mock_get)
 
     client = GoogleBooksClient(api_key="fake_key")
