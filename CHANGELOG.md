@@ -16,3 +16,19 @@
 
 ### Fixed
 - Resolved several errors (TypeError, IndexError, ValueError) that could cause the program to crash
+
+## v3 - implement FastAPI and basic tests (14 Dec 2025)
+
+### Added
+- FastAPI application and routes (SQL storage only)
+- CRUD endpoints to add, update, delete, fetch books from library
+- Utility endpoints like /random and /stats to fetch random book and view library stats
+- Basic tests for SQL storage, mocked Google Books API, and FastAPI endpoints
+- Project is now structured as a package using the src/ layout
+- Option to view detailed info in library (SQL and JSON storage)
+- Option to let user choose between viewing and searching books whenever launching the library (CLI only)
+
+### Changed
+- Slightly refactored CLI logic
+- Formatted the entire codebase with Black
+
