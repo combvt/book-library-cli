@@ -28,6 +28,7 @@ MANIFEST
 book_library.json
 books.db
 test.py
+launch.json
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
