@@ -5,7 +5,7 @@ for browsing and searching books.
 
 ## Features
 
-- Search books using Google Books API
+- Search books using the Google Books API
 - Add books to a personal library
 - View stored books and detailed information
 - Remove books from the library
@@ -88,17 +88,17 @@ From the project root directory:
 - Windows
 
 ```bash
-    python -m venv .venv
+python -m venv .venv
 
-    .venv\Scripts\Activate.ps1
+.venv\Scripts\Activate.ps1
 ```
 If script execution is disabled, you may need to adjust PowerShell execution policy.
 
 - Linux / macOS
 ```bash
-    python3 -m venv .venv
+python3 -m venv .venv
 
-    source .venv/bin/activate
+source .venv/bin/activate
 ```
 Deactivate the virtual environment using `deactivate`
 
@@ -194,9 +194,11 @@ uvicorn src.api_app:app --reload
 - These models control validation and API responses but are not used internally by the CLI
 
 ## Tests
+- Run the test suite using `pytest`
+- Tests cover SQL storage logic, mocked Google Books API calls, and REST API endpoints
 
 ## Common issues / troubleshooting
-- Missing API KEY” → create `.env` and set `API_KEY`  
+- Missing API KEY → create `.env` and set `API_KEY`  
 
 - If using SQLite: DB file location controlled by `DB_PATH`
 
@@ -211,5 +213,4 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) for detai
 ## Notes
 - This project was built to practice backend fundamentals such as API design,
 data persistence, external API integration, and testing.
-- FastAPI endpoints currently support SQL storage only 
 
