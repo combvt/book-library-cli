@@ -6,7 +6,13 @@ for browsing and searching books.
 ## Features
 
 ## Tech stack
-
+- Python - core language
+- FastAPI - REST api framework
+- SQLite / JSON - data storage
+- Google Books API - external book data source
+- Pydantic - request/response validation
+- Requests - HTTP client
+- Pytest - automated testing
 ## Project Structure
 
 ## Setup
@@ -50,7 +56,7 @@ install, venv, dependencies
 ## Changelog
 See [CHANGELOG.md](CHANGELOG.md) for a history of feature additions and the evolution of the project over time.
 ## License
-
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 ## Notes
 - This project was built to practice backend fundamentals such as API design,
 data persistence, external API integration, and testing.
