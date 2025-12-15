@@ -13,10 +13,75 @@ for browsing and searching books.
 - Pydantic - request/response validation
 - Requests - HTTP client
 - Pytest - automated testing
+
 ## Project Structure
+```text
+├── src/
+│   ├── api_app.py        # FastAPI application
+│   ├── main.py           # CLI entrypoint
+│   ├── library.py        # Core library logic
+│   ├── models.py         # Domain models
+│   ├── schemas.py        # Pydantic API schemas
+│   ├── google_api_client.py
+│   ├── utils.py
+│   ├── db.py
+│   ├── config.py
+│   ├── storage/
+│   │   ├── storage_base.py
+│   │   ├── json_storage.py
+│   │   └── sql_storage.py
+│   └── exceptions.py
+├── tests/                # Pytest test suite
+├── requirements.txt
+├── .env.example
+├── CHANGELOG.md
+├── LICENSE
+└── README.md
+```
 
 ## Setup
-install, venv, dependencies
+#### Prerequisites
+- Python 3.11+
+- Git (optional, for cloning the repository)
+- Google Books API key required for full functionality
+
+#### Clone the repo
+- `git clone https://github.com/combvt/book-library-tracker.git`
+- `cd book-library-tracker`
+
+#### Create & activate a virtual environment
+From the project root directory:
+- Windows
+
+```bash
+    python -m venv .venv
+
+    .venv\Scripts\Activate.ps1
+```
+If script execution is disabled, you may need to adjust PowerShell execution policy.
+
+- Linux / macOS
+```bash
+    python3 -m venv .venv
+
+    source .venv/bin/activate
+```
+Deactivate the virtual environment using `deactivate`
+
+
+#### Install dependencies
+
+Make sure `pip` is up to date:
+
+```bash
+python -m pip install --upgrade pip
+```
+Install the project dependencies
+```bash
+pip install -r requirements.txt
+```
+
+
 ## Environment variables
 
 ## How to run
@@ -55,8 +120,10 @@ install, venv, dependencies
 
 ## Changelog
 See [CHANGELOG.md](CHANGELOG.md) for a history of feature additions and the evolution of the project over time.
+
 ## License
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
 ## Notes
 - This project was built to practice backend fundamentals such as API design,
 data persistence, external API integration, and testing.
