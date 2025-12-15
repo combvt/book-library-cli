@@ -83,6 +83,19 @@ pip install -r requirements.txt
 
 
 ## Environment variables
+This project uses environment variables, stored in a `.env` file.
+
+Create your `.env` file via:
+
+```bash
+cp .env.example .env
+```
+The `.env` file defines the following variables:
+- `API_KEY` - required, Google Books API key
+- `LIBRARY_PATH` - optional, defaults to `book_library.json`
+- `DB_PATH` - optional, defaults to `books.db`
+
+Only `API_KEY` is required in order for the application to run.
 
 ## How to run
 
