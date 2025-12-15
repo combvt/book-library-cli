@@ -133,13 +133,50 @@ Only `API_KEY` is required in order for the application to run.
 
 ## How to run
 
-- ### Run the CLI
+#### Run the CLI
+- Run the application from the project root directory via:
+```bash
+python -m src.main
+```
+- You will be prompted to choose a storage backend (`json` or `sql`)
+- Search for books using the Google Books API or browse your existing library
+- When browsing the library, you can view detailed information about a book or remove it from the library
 
-- ### Run the API
+#### Run the API
+- Host your local server via:
+```bash
+uvicorn src.api_app:app --reload
+```
+- The API will be available at `http://127.0.0.1:8000`
+- Interactive API documentation is available via Swagger UI at `http://127.0.0.1:8000/docs`
+- The API uses the SQL storage backend only
 
 ## API endpoints overview
+- All endpoints are available via Swagger UI at `/docs`.
+- API uses SQL storage only.
+
+#### Library endpoints
+- `GET /books` — list all books
+- `GET /books?q=...` — search within stored library (title/author/description)
+- `GET /books/{sql_index}` — fetch a single book by SQL id
+- `DELETE /books/{sql_index}` — delete a book by SQL id
+- `PUT /books/{sql_index}` — update fields on a stored book
+
+#### Google Books integration
+- `GET /search/google?q=...&results=...` — search via Google Books API (does not store)
+- `POST /books/from-google/{book_id}` — save book by Google ID
+
+#### Utility endpoints
+- `GET /books/random` — fetch a random book from library
+- `GET /books/stats` — library statistics (total books, unique authors, page stats, earliest/latest added)
+
+#### Minimal notes
+- `results` is limited (1-20)
+- Update endpoint accepts partial fields (only provided fields are updated)
+- Common status codes (200/201/204, 404, 409)
 
 ## Data model notes
+
 #### Book 
 - Core domain model representing a book fetched from Google Books
 - Stored fields include title, author, publication date, page count, categories, description, ISBN and Google Books ID
