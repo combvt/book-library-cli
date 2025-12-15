@@ -22,19 +22,19 @@ install, venv, dependencies
 ## API endpoints overview
 
 ## Data model notes
-### Book 
+#### Book 
 - Core domain model representing a book fetched from Google Books
 - Stored fields include title, author, publication date, page count, categories, description, ISBN and Google Books ID
 
-### SQL metadata
+#### SQL metadata
 - When using SQL storage, books are assigned an auto-increment SQL ID
 - A `created_at` timestamp is automatically stored when the book is added
 
-### Storage differences
+#### Storage differences
 - JSON storage persists only the core book fields without additional metadata
 - SQL storage supports additional metadata and statistical queries
 
-### API schemas (Pydantic)
+#### API schemas (Pydantic)
 - Request and response models are defined using Pydantic
 - These models control validation and API responses but are not used internally by the CLI
 
@@ -48,7 +48,7 @@ install, venv, dependencies
 - If JSON file corrupted/invalid → app treats it as empty (your JSON storage returns [] )
 
 ## Changelog
-
+See [CHANGELOG.md](CHANGELOG.md) for a history of feature additions and the evolution of the project over time.
 ## License
 
 ## Notes
