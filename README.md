@@ -5,9 +5,43 @@ for browsing and searching books.
 
 ## Features
 
+- Search books using Google Books API
+- Add books to a personal library
+- View stored books and detailed information
+- Remove books from the library
+
+---
+
+- Support for both SQLite & JSON storage backends
+- Ability to choose storage type when using the CLI
+- Persistent storage across sessions
+
+---
+
+- Interactive command-line interface for searching and managing books
+- Detailed book view within the CLI
+- Option to switch between searching and browsing the library
+
+---
+
+- REST API built with FastAPI (SQL storage)
+- CRUD operations for managing books
+- Search, random book, and library statistics endpoints
+- Automatic API documentation via Swagger UI
+
+---
+
+- Request & response validation using Pydantic
+- Structured error handling for invalid requests
+
+---
+
+- Automated tests for storage layer, API endpoints, and Google Books client
+- Mocked external API calls in tests
+
 ## Tech stack
 - Python - core language
-- FastAPI - REST api framework
+- FastAPI - REST API framework
 - SQLite / JSON - data storage
 - Google Books API - external book data source
 - Pydantic - request/response validation
